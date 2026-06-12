@@ -3,220 +3,382 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI知識 1から100 — ゼロから学ぶAI完全ガイド</title>
+<title>AIの知識、1から100。— ゼロから学ぶAI読本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f8fa;
-    --card: #ffffff;
-    --text: #1a202c;
-    --muted: #64748b;
-    --accent: #4f46e5;
-    --accent-light: #eef2ff;
-    --border: #e2e8f0;
-    --done: #10b981;
-    --done-bg: #ecfdf5;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0f172a;
-      --card: #1e293b;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --accent: #818cf8;
-      --accent-light: #312e81;
-      --border: #334155;
-      --done: #34d399;
-      --done-bg: #064e3b;
-    }
+    --paper: #f8f5ee;
+    --paper-deep: #f1ecdf;
+    --ink: #211d16;
+    --ink-soft: #5c564a;
+    --line: #ddd5c4;
+    --vermilion: #c2401f;
+    --vermilion-soft: #f3e3dc;
+    --serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --gothic: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.8;
+    font-family: var(--gothic);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 2;
+    -webkit-font-smoothing: antialiased;
   }
-  header {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
-    color: #fff;
-    padding: 48px 24px 40px;
-    text-align: center;
-  }
-  header h1 { font-size: 2rem; margin-bottom: 8px; }
-  header p { opacity: 0.9; max-width: 640px; margin: 0 auto; }
-  .progress-wrap {
-    max-width: 640px;
-    margin: 24px auto 0;
-    background: rgba(255,255,255,0.25);
-    border-radius: 999px;
-    height: 14px;
-    overflow: hidden;
-  }
-  .progress-bar {
-    height: 100%;
-    background: #fff;
-    border-radius: 999px;
-    width: 0%;
-    transition: width 0.4s ease;
-  }
-  .progress-label { margin-top: 8px; font-size: 0.9rem; opacity: 0.95; }
+  ::selection { background: var(--vermilion); color: var(--paper); }
 
-  .container {
-    display: flex;
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 24px;
-    padding: 24px;
+  /* ---------- 表紙 ---------- */
+  .cover {
+    border-bottom: 1px solid var(--line);
+    padding: 96px 24px 72px;
+    position: relative;
   }
-  nav.toc {
-    width: 240px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 16px;
-    align-self: flex-start;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
-    max-height: calc(100vh - 32px);
-    overflow-y: auto;
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--vermilion);
   }
-  nav.toc h2 { font-size: 0.95rem; color: var(--muted); margin-bottom: 8px; }
-  nav.toc a {
-    display: block;
-    padding: 6px 10px;
-    border-radius: 8px;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 0.88rem;
-    margin-bottom: 2px;
+  .cover-inner { max-width: 920px; margin: 0 auto; }
+  .cover-eyebrow {
+    font-family: var(--gothic);
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-bottom: 36px;
   }
-  nav.toc a:hover { background: var(--accent-light); }
-  nav.toc .toc-count { color: var(--muted); font-size: 0.75rem; }
-
-  main { flex: 1; min-width: 0; }
-  .search-box {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    font-size: 1rem;
-    background: var(--card);
-    color: var(--text);
-    margin-bottom: 24px;
+  .cover h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2.5rem, 7vw, 4.6rem);
+    line-height: 1.35;
+    letter-spacing: 0.06em;
   }
-  .search-box:focus { outline: 2px solid var(--accent); border-color: transparent; }
-
-  section.chapter { margin-bottom: 40px; }
-  .chapter-head {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 4px;
-    padding-top: 8px;
+  .cover h1 .num { color: var(--vermilion); }
+  .cover-lead {
+    margin-top: 36px;
+    max-width: 36em;
+    font-size: 0.95rem;
+    line-height: 2.3;
+    color: var(--ink-soft);
   }
-  .chapter-head h2 { font-size: 1.4rem; }
-  .chapter-range {
-    font-size: 0.8rem;
-    color: var(--accent);
-    background: var(--accent-light);
-    padding: 2px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .chapter-desc { color: var(--muted); font-size: 0.92rem; margin-bottom: 16px; }
-
-  .topic {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    transition: border-color 0.2s;
-  }
-  .topic.done { background: var(--done-bg); border-color: var(--done); }
-  .topic-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    cursor: pointer;
-  }
-  .topic-num {
-    flex-shrink: 0;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    background: var(--accent-light);
-    color: var(--accent);
+  .cover-seal {
+    position: absolute;
+    right: max(24px, calc((100% - 920px) / 2));
+    bottom: 64px;
+    width: 92px;
+    height: 92px;
+    border: 2.5px solid var(--vermilion);
+    border-radius: 50%;
+    color: var(--vermilion);
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.5;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 0.95rem;
+    text-align: center;
+    transform: rotate(6deg);
+    letter-spacing: 0.1em;
   }
-  .topic.done .topic-num { background: var(--done); color: #fff; }
-  .topic-title { font-size: 1.05rem; font-weight: 700; flex: 1; padding-top: 5px; }
-  .topic-check {
+  @media (max-width: 720px) {
+    .cover { padding: 64px 20px 56px; }
+    .cover-seal { position: static; transform: rotate(6deg); margin: 40px 0 0 auto; }
+  }
+
+  /* ---------- 読了メーター ---------- */
+  .meter {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .meter-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .meter-label {
+    font-family: var(--serif);
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .meter-label strong { color: var(--vermilion); font-size: 1.15rem; margin: 0 2px; }
+  .meter-track { flex: 1; height: 2px; background: var(--line); position: relative; }
+  .meter-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--vermilion);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ---------- 本文レイアウト ---------- */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    display: flex;
+    gap: 72px;
+  }
+  main { flex: 1; min-width: 0; max-width: 820px; }
+
+  /* 目次 */
+  nav.toc {
+    width: 200px;
     flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    margin-top: 7px;
-    accent-color: var(--done);
-    cursor: pointer;
+    position: sticky;
+    top: 78px;
+    align-self: flex-start;
+    font-size: 0.82rem;
   }
-  .topic-body { margin-top: 10px; color: var(--text); font-size: 0.95rem; padding-left: 50px; }
-  .topic-body .keyword { color: var(--accent); font-weight: 700; }
-  @media (max-width: 800px) {
-    .container { flex-direction: column; }
-    nav.toc { width: 100%; position: static; max-height: none; }
+  nav.toc .toc-title {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+  }
+  nav.toc a {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.6;
+  }
+  nav.toc a:hover { color: var(--vermilion); }
+  nav.toc .toc-no {
+    font-family: var(--serif);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  nav.toc a:hover .toc-no { color: var(--vermilion); }
+  @media (max-width: 920px) {
+    .layout { flex-direction: column; gap: 48px; }
+    nav.toc { position: static; width: 100%; }
+  }
+
+  /* 検索 */
+  .search-wrap { margin-bottom: 72px; }
+  .search-box {
+    width: 100%;
+    padding: 10px 2px;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    font-family: var(--gothic);
+    font-size: 0.95rem;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .search-box::placeholder { color: #a39b89; }
+  .search-box:focus { outline: none; border-bottom: 2px solid var(--vermilion); }
+
+  /* 章 */
+  section.chapter { margin-bottom: 96px; }
+  .chapter-head { margin-bottom: 16px; }
+  .chapter-no {
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.5em;
+    color: var(--vermilion);
+    margin-bottom: 14px;
+  }
+  .chapter-head h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+  }
+  .chapter-en {
+    font-size: 0.68rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #a39b89;
+    margin-top: 10px;
+  }
+  .chapter-desc {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin: 22px 0 36px;
+    padding-left: 18px;
+    border-left: 2px solid var(--vermilion);
+    line-height: 2.1;
+  }
+
+  /* 項目 */
+  .topic {
+    border-top: 1px solid var(--line);
+    padding: 30px 0 32px;
+  }
+  section.chapter .topic:last-child { border-bottom: 1px solid var(--line); }
+  .topic-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .topic-num {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #b5ac98;
+    letter-spacing: 0.05em;
+    min-width: 2.6em;
+    font-feature-settings: "tnum";
+    transition: color 0.3s;
+  }
+  .topic.done .topic-num { color: var(--vermilion); }
+  .topic-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+    flex: 1;
+  }
+  .topic-body {
+    margin-top: 14px;
+    padding-left: calc(2.6em * 1.5 / 1 + 18px);
+    font-size: 0.92rem;
+    line-height: 2.15;
+    color: #3d382e;
+    max-width: 40em;
+  }
+  @media (max-width: 720px) {
     .topic-body { padding-left: 0; }
   }
+
+  /* 読了印 */
+  .stamp {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: #b5ac98;
+    font-family: var(--serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.25s ease;
+    line-height: 1.4;
+    padding: 0;
+  }
+  .stamp:hover { border-color: var(--vermilion); color: var(--vermilion); }
+  .topic.done .stamp {
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    background: var(--vermilion-soft);
+    transform: rotate(-8deg);
+    font-weight: 700;
+  }
+
+  /* 奥付 */
   footer {
+    border-top: 1px solid var(--line);
+    padding: 56px 24px 72px;
     text-align: center;
-    color: var(--muted);
-    padding: 32px;
-    font-size: 0.85rem;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+  footer .colophon-title {
+    font-family: var(--serif);
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    font-size: 0.9rem;
   }
   .reset-btn {
+    margin-top: 24px;
     background: none;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 6px 16px;
-    border-radius: 8px;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-family: var(--gothic);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    padding: 8px 22px;
     cursor: pointer;
-    margin-top: 8px;
+    transition: all 0.2s;
   }
-  .reset-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .reset-btn:hover { border-color: var(--vermilion); color: var(--vermilion); }
+
+  .congrats {
+    display: none;
+    margin: 0 auto 48px;
+    max-width: 820px;
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    font-family: var(--serif);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+  }
+  .congrats.show { display: block; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>🧠 AI知識 1から100</h1>
-  <p>人工知能の基礎から最先端まで、100のトピックで体系的に学べる完全ガイド。読み終えた項目にチェックを入れて、自分のペースで進めましょう。</p>
-  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
-  <div class="progress-label" id="progressLabel">0 / 100 完了</div>
+<header class="cover">
+  <div class="cover-inner">
+    <p class="cover-eyebrow">Artificial Intelligence — A Reader's Guide</p>
+    <h1>ＡＩの知識、<br><span class="num">１</span>から<span class="num">１００</span>。</h1>
+    <p class="cover-lead">人工知能のことを、いちばん最初から、いちばん遠くまで。仕組み、歴史、使いかた、つくりかた、そして社会とのかかわりまで——百の話題を、一冊の本のように編みました。気に入った頁から、どうぞ。</p>
+  </div>
+  <div class="cover-seal">全百項<br>収録</div>
 </header>
 
-<div class="container">
+<div class="meter">
+  <div class="meter-inner">
+    <span class="meter-label">読了 <strong id="doneCount">0</strong>／100</span>
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+</div>
+
+<div class="layout">
   <nav class="toc" id="toc">
-    <h2>目次</h2>
+    <div class="toc-title">目次</div>
   </nav>
   <main>
-    <input type="search" class="search-box" id="searchBox" placeholder="🔍 キーワードで検索（例：Transformer、過学習、RAG）">
+    <div class="search-wrap">
+      <input type="search" class="search-box" id="searchBox" placeholder="ことばで探す — Transformer、過学習、RAG …">
+    </div>
+    <div class="congrats" id="congrats">全百項、読了。お見事です。</div>
     <div id="content"></div>
   </main>
 </div>
 
 <footer>
-  <p>AI知識 1から100 — 学習進捗はこのブラウザに自動保存されます。</p>
-  <button class="reset-btn" id="resetBtn">進捗をリセット</button>
+  <p class="colophon-title">奥付</p>
+  <p>ＡＩの知識、１から１００。— 読了の印は、この端末にだけ静かに残ります。</p>
+  <button class="reset-btn" id="resetBtn">読了の記録を白紙に戻す</button>
 </footer>
 
 <script>
 const CHAPTERS = [
   {
-    title: "第1章 AIの基礎",
+    no: "第一章",
+    title: "AIの基礎",
+    en: "Fundamentals",
     desc: "そもそもAIとは何か。歴史と基本概念を押さえて、学習の土台を作ります。",
     topics: [
       ["AI（人工知能）とは何か", "AI（Artificial Intelligence）とは、人間の知的な活動——認識・推論・学習・判断など——をコンピュータで実現する技術の総称です。明確な単一の定義はなく、「人間のように考える機械」から「特定のタスクを賢くこなすプログラム」まで幅広い意味で使われます。現在私たちが日常で触れるAIのほとんどは、特定の目的に特化したものです。"],
@@ -232,7 +394,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第2章 機械学習の基礎",
+    no: "第二章",
+    title: "機械学習の基礎",
+    en: "Machine Learning",
     desc: "AIの中核技術である機械学習。その仕組みと基本用語を理解します。",
     topics: [
       ["機械学習とは", "機械学習（Machine Learning）とは、明示的にプログラムしなくても、データから自動的にパターンや規則性を学習する技術です。例えば猫の写真を大量に見せることで、「猫らしさ」の特徴を機械自身が獲得します。学習の方式によって、教師あり学習・教師なし学習・強化学習の3つに大別されます。"],
@@ -248,7 +412,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第3章 ディープラーニング",
+    no: "第三章",
+    title: "ディープラーニング",
+    en: "Deep Learning",
     desc: "第3次AIブームの主役。ニューラルネットワークの仕組みを学びます。",
     topics: [
       ["ニューラルネットワークとは", "人間の脳の神経回路網をヒントにした数理モデルです。「入力層」「隠れ層」「出力層」というニューロン（ノード）の層で構成され、各ニューロン間の結合の強さ（重み）を調整することで学習します。隠れ層を深く（ディープに）重ねたものがディープラーニングです。"],
@@ -259,12 +425,14 @@ const CHAPTERS = [
       ["CNN（畳み込みニューラルネットワーク）", "画像処理に特化したネットワーク構造です。「畳み込み層」が画像の局所的な特徴（エッジや模様）を検出し、層を重ねるごとに目・顔・人物といったより抽象的な特徴を捉えていきます。画像認識・物体検出・医療画像診断など、コンピュータビジョン分野の発展を牽引しました。"],
       ["RNNとLSTM", "RNN（再帰型ニューラルネットワーク）は、文章や時系列のような順序のあるデータを扱うために、過去の情報を記憶しながら処理するネットワークです。長い系列で記憶が薄れる弱点を改良したのがLSTMです。Transformerの登場で主役の座は譲りましたが、系列データ処理の発展に大きく貢献しました。"],
       ["GPUとAIの計算", "ディープラーニングの学習は膨大な行列計算の繰り返しで、これを並列処理が得意なGPU（画像処理装置）が劇的に高速化しました。もともとゲーム用だったGPUがAIの必須インフラとなり、NVIDIA社が市場を席巻しています。近年はAI専用チップ（TPUなど）の開発も活発です。"],
-      ["ImageNetとAlexNetの衝撃", "2012年、画像認識コンテスト「ILSVRC」でディープラーニングを使ったAlexNetが従来手法に圧倒的な大差で優勝しました。この出来事が第3次AIブームの号砲となり、世界中の研究と投資がディープラーニングに集中しました。大規模データセット（ImageNet）と GPU の組み合わせが勝因で、以降「データ×計算力」がAI発展の方程式となります。"],
+      ["ImageNetとAlexNetの衝撃", "2012年、画像認識コンテスト「ILSVRC」でディープラーニングを使ったAlexNetが従来手法に圧倒的な大差で優勝しました。この出来事が第3次AIブームの号砲となり、世界中の研究と投資がディープラーニングに集中しました。大規模データセット（ImageNet）とGPUの組み合わせが勝因で、以降「データ×計算力」がAI発展の方程式となります。"],
       ["ハイパーパラメータ", "学習率、層の数、ニューロンの数、バッチサイズなど、学習を始める前に人間が設定する値をハイパーパラメータと呼びます。モデルが自動で学ぶパラメータ（重み）とは区別されます。この設定次第で性能が大きく変わるため、グリッドサーチやベイズ最適化などの探索手法で最適な組み合わせを見つけます。"]
     ]
   },
   {
-    title: "第4章 自然言語処理とLLM",
+    no: "第四章",
+    title: "自然言語処理とLLM",
+    en: "NLP & Large Language Models",
     desc: "言葉を扱うAIの仕組み。ChatGPTやClaudeを支える技術の核心に迫ります。",
     topics: [
       ["自然言語処理（NLP）とは", "人間が日常的に使う言葉（自然言語）をコンピュータで処理する技術分野です。翻訳、要約、感情分析、質問応答、文章生成など幅広いタスクを含みます。言葉は曖昧で文脈に依存するため長年難問とされてきましたが、大規模言語モデルの登場で精度が飛躍的に向上しました。"],
@@ -280,7 +448,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第5章 生成AI",
+    no: "第五章",
+    title: "生成AI",
+    en: "Generative AI",
     desc: "文章・画像・音声・動画を生み出すAI。その仕組みと特性、注意点を学びます。",
     topics: [
       ["生成AIとは", "従来のAIが「認識・分類・予測」を主としていたのに対し、生成AI（Generative AI）は文章・画像・音声・動画などのコンテンツを新たに作り出すAIです。2022年のStable DiffusionとChatGPTの登場で一気に普及し、創作・業務・教育のあり方を変えつつあります。"],
@@ -296,7 +466,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第6章 AI活用の実践スキル",
+    no: "第六章",
+    title: "AI活用の実践スキル",
+    en: "Practical Skills",
     desc: "AIを使いこなすための技術。プロンプトからエージェントまで、実用スキルを身につけます。",
     topics: [
       ["プロンプトエンジニアリングとは", "AIから望む出力を引き出すために、指示文（プロンプト）を設計する技術です。同じ質問でも書き方次第で回答の質が大きく変わります。モデルの性能向上により細かいテクニックの重要性は下がりつつありますが、「明確に意図を伝える」という本質はAI活用の基礎スキルであり続けています。"],
@@ -312,7 +484,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第7章 AI開発の実践",
+    no: "第七章",
+    title: "AI開発の実践",
+    en: "Building with AI",
     desc: "AIを「作る側」の知識。開発ツールやライブラリ、開発の流れを学びます。",
     topics: [
       ["PythonとAI開発", "AI開発の標準言語はPythonです。文法がシンプルで学びやすく、AI関連のライブラリが圧倒的に充実しているためです。データ処理から学習、デプロイまでPythonだけで完結できます。AIエンジニアを目指すなら最初に習得すべき言語であり、Jupyter Notebookなどの対話的環境とともに使われます。"],
@@ -328,7 +502,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第8章 AIの倫理と社会",
+    no: "第八章",
+    title: "AIの倫理と社会",
+    en: "Ethics & Society",
     desc: "AIを正しく使うために。リスク・倫理・法規制の知識は全員の必修科目です。",
     topics: [
       ["AI倫理とは", "AIの開発・利用において守るべき価値観や原則を扱う分野です。公平性、透明性、プライバシー、安全性、人間の尊厳の尊重などが主要テーマです。AIが社会の重要な意思決定（採用・融資・医療など）に関わるようになった今、技術者だけでなく利用者全員に求められる素養となっています。"],
@@ -344,7 +520,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第9章 最先端トピック",
+    no: "第九章",
+    title: "最先端トピック",
+    en: "Frontier Topics",
     desc: "AIの今とこれから。2026年現在の最前線で何が起きているかを掴みます。",
     topics: [
       ["推論モデル（Reasoning Models）", "回答する前に内部で長い思考（推論）を行うタイプのLLMです。OpenAIのoシリーズを皮切りに各社が開発し、数学・科学・プログラミングなど複雑な問題で劇的な性能向上を示しました。「考える時間を増やすほど賢くなる」という推論時スケーリングの発見は、学習時スケーリングに続くAI発展の新たな軸となっています。"],
@@ -360,7 +538,9 @@ const CHAPTERS = [
     ]
   },
   {
-    title: "第10章 AI時代を生きる",
+    no: "第十章",
+    title: "AI時代を生きる",
+    en: "Living with AI",
     desc: "学んだ知識をどう活かすか。キャリア、学習継続、そして次の一歩へ。",
     topics: [
       ["AI時代に求められるスキル", "AIが知的作業を担う時代に価値が高まるのは、①課題を発見し正しく定義する力、②AIへの的確な指示と出力の検証力、③専門領域の深い知識（AIの出力の良し悪しを判断する基準）、④人間同士の信頼関係構築、⑤最終判断の責任を引き受ける力です。「AIにできること」を増やすより「AIと組んで何を成すか」が問われます。"],
@@ -372,7 +552,7 @@ const CHAPTERS = [
       ["個人でできるAIプロジェクト", "知識を定着させる最良の方法は、小さくても自分のプロジェクトを作ることです。例：自分の業務を効率化するプロンプト集、ChatGPT/Claude APIを使った簡単なアプリ、RAGによる自分専用の知識ボット、ローカルLLMの構築、Kaggleコンペへの参加など。完成度より「作りきる」ことを優先しましょう。"],
       ["組織へのAI導入の進め方", "ビジネスでのAI導入は、①小さな業務での試行（PoC）から始める、②効果を測定して成功事例を作る、③ガイドラインと教育を整備する、④段階的に適用範囲を広げる、という流れが定石です。失敗の典型は「目的なきAI導入」です。技術起点ではなく「どの課題を解決するか」起点で考えることが成功の鍵です。"],
       ["AIの未来を考える", "今後数年で、AIエージェントの本格普及、科学研究の加速、フィジカルAI（ロボット）の進展が見込まれます。長期的にはAGIの実現可能性とその影響が最大の論点です。未来予測は常に不確実ですが、確実に言えるのは「AIと無関係でいられる仕事や生活はほぼなくなる」こと。だからこそ、仕組みを理解した上で主体的に関わる姿勢が大切です。"],
-      ["まとめ — 次の一歩へ", "ここまでで、AIの定義から機械学習・ディープラーニングの仕組み、LLMと生成AI、活用スキル、開発、倫理、最先端動向までを一通り学びました。おめでとうございます！次の一歩は「実践」です。今日学んだことを一つ選んで実際にAIを触り、小さなプロジェクトを作り、学び続けてください。AI時代の最強のスキルは、学び続ける力そのものです。"]
+      ["まとめ — 次の一歩へ", "ここまでで、AIの定義から機械学習・ディープラーニングの仕組み、LLMと生成AI、活用スキル、開発、倫理、最先端動向までを一通り学びました。おめでとうございます。次の一歩は「実践」です。今日学んだことを一つ選んで実際にAIを触り、小さなプロジェクトを作り、学び続けてください。AI時代の最強のスキルは、学び続ける力そのものです。"]
     ]
   }
 ];
@@ -392,7 +572,10 @@ CHAPTERS.forEach((ch, ci) => {
 
   const head = document.createElement("div");
   head.className = "chapter-head";
-  head.innerHTML = `<h2>${ch.title}</h2><span class="chapter-range">${start}〜${start + ch.topics.length - 1}</span>`;
+  head.innerHTML = `
+    <div class="chapter-no">${ch.no}</div>
+    <h2>${ch.title}</h2>
+    <div class="chapter-en">${ch.en} ・ ${start} — ${start + ch.topics.length - 1}</div>`;
   section.appendChild(head);
 
   const desc = document.createElement("p");
@@ -403,21 +586,22 @@ CHAPTERS.forEach((ch, ci) => {
   ch.topics.forEach(([title, body]) => {
     num++;
     const n = num;
-    const div = document.createElement("div");
+    const div = document.createElement("article");
     div.className = "topic" + (progress[n] ? " done" : "");
-    div.dataset.n = n;
     div.innerHTML = `
       <div class="topic-head">
-        <div class="topic-num">${n}</div>
-        <div class="topic-title">${title}</div>
-        <input type="checkbox" class="topic-check" ${progress[n] ? "checked" : ""} title="読んだらチェック">
+        <span class="topic-num">${String(n).padStart(3, "0")}</span>
+        <h3 class="topic-title">${title}</h3>
+        <button class="stamp" title="読んだら印を押す">${progress[n] ? "読了" : "未読"}</button>
       </div>
-      <div class="topic-body">${body}</div>`;
-    div.querySelector(".topic-check").addEventListener("change", (e) => {
-      progress[n] = e.target.checked;
-      if (!e.target.checked) delete progress[n];
+      <p class="topic-body">${body}</p>`;
+    const stamp = div.querySelector(".stamp");
+    stamp.addEventListener("click", () => {
+      const nowDone = !progress[n];
+      if (nowDone) progress[n] = true; else delete progress[n];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-      div.classList.toggle("done", e.target.checked);
+      div.classList.toggle("done", nowDone);
+      stamp.textContent = nowDone ? "読了" : "未読";
       updateProgress();
     });
     section.appendChild(div);
@@ -427,14 +611,15 @@ CHAPTERS.forEach((ch, ci) => {
 
   const link = document.createElement("a");
   link.href = "#ch" + (ci + 1);
-  link.innerHTML = `${ch.title} <span class="toc-count">${start}〜${start + ch.topics.length - 1}</span>`;
+  link.innerHTML = `<span class="toc-no">${ch.no}</span><span>${ch.title}</span>`;
   toc.appendChild(link);
 });
 
 function updateProgress() {
   const done = Object.keys(progress).length;
-  document.getElementById("progressBar").style.width = done + "%";
-  document.getElementById("progressLabel").textContent = `${done} / 100 完了` + (done === 100 ? " 🎉 全項目マスター！" : "");
+  document.getElementById("doneCount").textContent = done;
+  document.getElementById("meterFill").style.width = done + "%";
+  document.getElementById("congrats").classList.toggle("show", done === 100);
 }
 updateProgress();
 
@@ -450,11 +635,13 @@ document.getElementById("searchBox").addEventListener("input", (e) => {
 });
 
 document.getElementById("resetBtn").addEventListener("click", () => {
-  if (!confirm("学習進捗をすべてリセットしますか？")) return;
+  if (!confirm("読了の記録をすべて白紙に戻しますか？")) return;
   progress = {};
   localStorage.removeItem(STORAGE_KEY);
-  document.querySelectorAll(".topic").forEach((t) => t.classList.remove("done"));
-  document.querySelectorAll(".topic-check").forEach((c) => (c.checked = false));
+  document.querySelectorAll(".topic").forEach((t) => {
+    t.classList.remove("done");
+    t.querySelector(".stamp").textContent = "未読";
+  });
   updateProgress();
 });
 </script>
