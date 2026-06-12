@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ヨットの知識、1から100。— 470で学ぶセーリング読本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f8f5ee;
+    --paper-deep: #f1ecdf;
+    --ink: #211d16;
+    --ink-soft: #5c564a;
+    --line: #ddd5c4;
+    --vermilion: #11707f;
+    --vermilion-soft: #dfecee;
+    --serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --gothic: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--gothic);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 2;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--vermilion); color: var(--paper); }
+
+  /* ---------- 表紙 ---------- */
+  .cover {
+    border-bottom: 1px solid var(--line);
+    padding: 72px 24px 72px;
+    position: relative;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--vermilion);
+  }
+  .cover-inner { max-width: 920px; margin: 0 auto; }
+  .series {
+    display: flex;
+    gap: 22px;
+    align-items: baseline;
+    margin-bottom: 56px;
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    flex-wrap: wrap;
+  }
+  .series-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 2px 10px;
+  }
+  .series a { color: var(--ink-soft); text-decoration: none; padding-bottom: 3px; }
+  .series a:hover { color: var(--vermilion); }
+  .series a.current {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom: 2px solid var(--vermilion);
+  }
+  .cover-eyebrow {
+    font-family: var(--gothic);
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6.4vw, 4.2rem);
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+  }
+  .cover h1 .num { color: var(--vermilion); }
+  .cover-lead {
+    margin-top: 36px;
+    max-width: 36em;
+    font-size: 0.95rem;
+    line-height: 2.3;
+    color: var(--ink-soft);
+  }
+  .cover-seal {
+    position: absolute;
+    right: max(24px, calc((100% - 920px) / 2));
+    bottom: 64px;
+    width: 92px;
+    height: 92px;
+    border: 2.5px solid var(--vermilion);
+    border-radius: 50%;
+    color: var(--vermilion);
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transform: rotate(6deg);
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 720px) {
+    .cover { padding: 48px 20px 56px; }
+    .cover-seal { position: static; transform: rotate(6deg); margin: 40px 0 0 auto; }
+  }
+
+  /* ---------- 読了メーター ---------- */
+  .meter {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .meter-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .meter-label {
+    font-family: var(--serif);
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .meter-label strong { color: var(--vermilion); font-size: 1.15rem; margin: 0 2px; }
+  .meter-track { flex: 1; height: 2px; background: var(--line); position: relative; }
+  .meter-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--vermilion);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ---------- 本文レイアウト ---------- */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    display: flex;
+    gap: 72px;
+  }
+  main { flex: 1; min-width: 0; max-width: 820px; }
+
+  nav.toc {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 78px;
+    align-self: flex-start;
+    font-size: 0.82rem;
+  }
+  nav.toc .toc-title {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+  }
+  nav.toc a {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.6;
+  }
+  nav.toc a:hover { color: var(--vermilion); }
+  nav.toc .toc-no {
+    font-family: var(--serif);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  nav.toc a:hover .toc-no { color: var(--vermilion); }
+  @media (max-width: 920px) {
+    .layout { flex-direction: column; gap: 48px; }
+    nav.toc { position: static; width: 100%; }
+  }
+
+  /* 検索・絞り込み */
+  .search-wrap {
+    margin-bottom: 72px;
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 2px;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    font-family: var(--gothic);
+    font-size: 0.95rem;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .search-box::placeholder { color: #a39b89; }
+  .search-box:focus { outline: none; border-bottom: 2px solid var(--vermilion); }
+
+  .filter-tabs { display: flex; align-items: baseline; }
+  .filter-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: var(--serif);
+    font-size: 0.92rem;
+    letter-spacing: 0.18em;
+    color: #a39b89;
+    padding: 10px 4px 8px;
+    margin-left: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .filter-tabs .filter-btn:first-child { margin-left: 0; }
+  .filter-btn:hover { color: var(--vermilion); }
+  .filter-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--vermilion);
+    font-weight: 700;
+  }
+  .filter-btn .cnt {
+    font-size: 0.72rem;
+    color: #a39b89;
+    margin-left: 4px;
+    letter-spacing: 0.05em;
+    font-feature-settings: "tnum";
+  }
+  .empty-note {
+    display: none;
+    font-family: var(--serif);
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .empty-note.show { display: block; }
+
+  /* 章 */
+  section.chapter { margin-bottom: 96px; }
+  .chapter-head { margin-bottom: 16px; }
+  .chapter-no {
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.5em;
+    color: var(--vermilion);
+    margin-bottom: 14px;
+  }
+  .chapter-head h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+  }
+  .chapter-en {
+    font-size: 0.68rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #a39b89;
+    margin-top: 10px;
+  }
+  .chapter-desc {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin: 22px 0 36px;
+    padding-left: 18px;
+    border-left: 2px solid var(--vermilion);
+    line-height: 2.1;
+  }
+
+  /* 項目 */
+  .topic {
+    border-top: 1px solid var(--line);
+    padding: 30px 0 32px;
+  }
+  section.chapter .topic:last-child { border-bottom: 1px solid var(--line); }
+  .topic-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .topic-num {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #b5ac98;
+    letter-spacing: 0.05em;
+    min-width: 2.6em;
+    font-feature-settings: "tnum";
+    transition: color 0.3s;
+  }
+  .topic.done .topic-num { color: var(--vermilion); }
+  .topic-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+    flex: 1;
+  }
+  .topic-body {
+    margin-top: 14px;
+    padding-left: calc(2.6em * 1.5 / 1 + 18px);
+    font-size: 0.92rem;
+    line-height: 2.15;
+    color: #3d382e;
+    max-width: 40em;
+  }
+  @media (max-width: 720px) {
+    .topic-body { padding-left: 0; }
+  }
+
+  /* 読了印 */
+  .stamp {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: #b5ac98;
+    font-family: var(--serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.25s ease;
+    line-height: 1.4;
+    padding: 0;
+  }
+  .stamp:hover { border-color: var(--vermilion); color: var(--vermilion); }
+  .topic.done .stamp {
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    background: var(--vermilion-soft);
+    transform: rotate(-8deg);
+    font-weight: 700;
+  }
+
+  /* 奥付 */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 56px 24px 72px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+  footer .colophon-title {
+    font-family: var(--serif);
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+  }
+  footer .series-foot { margin-top: 16px; }
+  footer .series-foot a { color: var(--vermilion); text-decoration: none; font-family: var(--serif); }
+  footer .series-foot a:hover { text-decoration: underline; }
+  .reset-btn {
+    margin-top: 24px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-family: var(--gothic);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    padding: 8px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--vermilion); color: var(--vermilion); }
+
+  .congrats {
+    display: none;
+    margin: 0 auto 48px;
+    max-width: 820px;
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    font-family: var(--serif);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+  }
+  .congrats.show { display: block; }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <nav class="series">
+      <span class="series-label">シリーズ</span>
+      <a href="index.html">第一巻　ＡＩ編</a>
+      <a href="programming.html">第二巻　プログラミング編</a>
+      <a href="yacht.html" class="current">第三巻　ヨット編</a>
+    </nav>
+    <p class="cover-eyebrow">470 Sailing — A Reader's Guide</p>
+    <h1>ヨットの知識、<br><span class="num">１</span>から<span class="num">１００</span>。</h1>
+    <p class="cover-lead">風だけで海を走るということを、いちばん最初から、いちばん遠くまで。艇のことば、風の読みかた、ふたりで艇を走らせる技術、そしてレースの駆け引きまで——470級ディンギーを舞台に、百の話題を一冊の本のように編みました。気に入った頁から、どうぞ。</p>
+  </div>
+  <div class="cover-seal">全百項<br>収録</div>
+</header>
+
+<div class="meter">
+  <div class="meter-inner">
+    <span class="meter-label">読了 <strong id="doneCount">0</strong>／100</span>
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <div class="toc-title">目次</div>
+  </nav>
+  <main>
+    <div class="search-wrap">
+      <input type="search" class="search-box" id="searchBox" placeholder="ことばで探す — タック、スピン、トラピーズ …">
+      <div class="filter-tabs" role="tablist">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="unread">未読<span class="cnt" id="cntUnread"></span></button>
+        <button class="filter-btn" data-filter="read">読了<span class="cnt" id="cntRead"></span></button>
+      </div>
+    </div>
+    <div class="congrats" id="congrats">全百項、読了。良い風を。</div>
+    <p class="empty-note" id="emptyNote"></p>
+    <div id="content"></div>
+  </main>
+</div>
+
+<footer>
+  <p class="colophon-title">奥付</p>
+  <p>ヨットの知識、１から１００。— 読了の印は、この端末にだけ静かに残ります。</p>
+  <p class="series-foot">姉妹巻：<a href="index.html">ＡＩの知識、１から１００。</a>　<a href="programming.html">プログラミングの知識、１から１００。</a></p>
+  <button class="reset-btn" id="resetBtn">読了の記録を白紙に戻す</button>
+</footer>
+
+<script>
+const CHAPTERS = [
+  {
+    no: "第一章",
+    title: "ヨットと470の基礎",
+    en: "The Boat & The Basics",
+    desc: "470というフネを知る。セーリングの世界に入るための最初の語彙です。",
+    topics: [
+      ["セーリングとは", "セーリングは、エンジンを使わず風の力だけで艇を走らせるスポーツです。自然を読む知性、艇を操る技術、体力、そして判断力が同時に試されます。同じ海面は二度とない——その日の風と波に合わせて最適解を探し続ける奥深さが、世界中の人を惹きつけてきました。"],
+      ["470級とは", "470（よんななまる）は全長4.70mの2人乗りディンギー（小型ヨット）で、1963年にフランスのアンドレ・コルニュが設計しました。トラピーズとスピンネーカーを備えた本格的なレース艇でありながら扱いやすく、1976年からオリンピック種目に採用されています。日本では大学ヨット部の主力クラスとして、最も層の厚い艇種のひとつです。"],
+      ["艇の各部名称", "船体をハル、前を バウ、後ろをスターン、右舷をスターボード、左舷をポートと呼びます。帆を支える縦の柱がマスト、メインセールの下辺を支える横棒がブームです。海の上では「右・左」ではなく必ず船体基準の言葉で呼び合います。名称の共有は、ふたり乗りの470では安全と速さの土台です。"],
+      ["3枚のセール", "470はメインセール（主帆）、ジブ（前帆）、スピンネーカー（風下用の大きな帆）の3枚を使います。メインは主にスキッパーが、ジブとスピンはクルーがトリム（調整）します。アップウィンド（風上向き）はメインとジブの2枚、ダウンウィンド（風下向き）はスピンを加えた3枚で走るのが基本形です。"],
+      ["スキッパーとクルーの役割", "スキッパー（艇長）はティラーを握り、操舵とメインセールトリム、戦略判断を担います。クルーはジブとスピンのトリム、トラピーズでのバランス確保、風の観測を担います。470は「クルーの艇」と言われるほどクルーの仕事量が多く、ふたりの呼吸が艇速に直結します。役割は分担しても、責任は常に共有です。"],
+      ["風で進む原理", "ヨットは風に押されるだけでなく、セールに風が流れることで飛行機の翼と同じ「揚力」を生み、風上方向にも進めます。セールで生まれた横向きの力を、水中のセンターボードが受け止めて前進力に変換します。「空のセールと水中のボード、2枚の翼で走る」——これがセーリングの物理の核心です。"],
+      ["風位 — 風に対する角度", "艇が風に対してどの角度で走っているかを風位と呼びます。風上に最も切り上がるクローズホールド、直角に走るアビーム、風を斜め後ろから受けるクォーターリー（ブロードリーチ）、真後ろから受けるランニングが基本です。真風上±約45度は帆走できない「デッドゾーン」。だから風上へはジグザグに進みます。"],
+      ["タックとジャイブ", "進む向きを変えて風を受ける舷を替える動作が方向転換の基本です。バウ（船首）を風上に通すのがタック、スターン（船尾）を風下に通すのがジャイブです。タックは安定的、ジャイブはブームが勢いよく返るため強風では難易度が上がります。この2つの精度が、レースの順位を最も簡単に変えます。"],
+      ["ヒールとフラット", "艇が横に傾くことをヒールと呼びます。少しのヒールが必要な場面もありますが、470は基本的に「フラット（水平）」が最速です。傾けば傾くほど舵が利かなくなり、横流れも増えます。体重移動（ハイクアウトやトラピーズ）で艇を水平に保ち続けることが、470のスピードの第一原則です。"],
+      ["安全の基本", "ライフジャケットの常時着用、出艇前の気象確認、艇から離れないこと（沈しても艇は最大の浮き）、単独で沖に出ないことが大原則です。ヨットは正しく恐れれば安全なスポーツですが、海は常に自然の領域。「今日は出ない」という判断も、立派なシーマンシップ（船乗りの心得）です。"]
+    ]
+  },
+  {
+    no: "第二章",
+    title: "艤装と道具",
+    en: "Rigging & Equipment",
+    desc: "出艇前の30分でレースは始まっている。艇を組み立てる知識と道具の話です。",
+    topics: [
+      ["艤装（ぎそう）の流れ", "艤装とは、保管状態の艇にマストを立て、セールやロープ類を取り付けて帆走できる状態にする作業です。マスト→ブーム→ラダー・センターボード確認→ロープ類→セールの順で組み上げ、最後に全体を点検します。艤装の丁寧さは海上トラブルの少なさに直結します。「艤装は陸でやる最初のレース」です。"],
+      ["スタンディングリギン", "マストを支える固定ワイヤー類の総称です。マストを左右から支えるシュラウド（サイドステー）、前方から支えるフォアステイがあります。この張り具合（リグテンション）はマストの曲がりとセールの形を決める、470チューニングの心臓部です。テンションゲージで数値管理するのが競技の常識です。"],
+      ["ランニングリギン", "セールの上げ下げや調整に使う動くロープ類です。セールを引き上げるハリヤード、セールの角度を調整するシート（メインシート・ジブシート・スピンシート）が代表です。レース中に何百回と引くロープだからこそ、太さ・材質・長さの最適化と、もつれない整理整頓が効いてきます。"],
+      ["センターボード", "ハル中央から水中に降ろす板で、横流れ（リーウェイ）を防ぎ、水中で揚力を生みます。クローズホールドでは全部降ろし、風下に行くほど引き上げて抵抗を減らします。470では上下の操作はクルーの仕事。風位ごとの適切なボード量を体で覚えることが、初級から中級への一歩です。"],
+      ["ラダーとティラー", "ラダー（舵板）はスターンに取り付けて水流を曲げ、艇の向きを変えます。スキッパーはティラー（舵棒）の先のエクステンション（延長棒）を握り、ハイクアウトしながら操舵します。ただし舵はブレーキでもあります。「舵で曲げる前に、セールと体重で曲げる」が速いセーラーの共通認識です。"],
+      ["トラピーズ", "マストから伸びるワイヤーにハーネスで体を預け、クルーが艇の外に体を完全に乗り出す装置です。ハイクアウトよりはるかに大きな復原力を生み、470のパワーの源になります。風の強弱に合わせて乗り出しと収納を繰り返すため、クルーの体力と感覚が最も問われる場面です。"],
+      ["スピンポール", "スピンネーカーを展開するときにマストに取り付ける棒で、スピンの風上側の角（タック）を支えます。ジャイブのたびに付け替える操作はクルーの腕の見せどころです。ポールの高さはスピンの形を決める重要な調整要素で、風速に応じて上下させます。"],
+      ["コントロールロープ", "セールの形を細かく調整するロープ群です。メインの前縁の張りを調整するカニンガム、下辺の張りを調整するアウトホール、ブームを下に引いてツイストを制御するバング（キッカー）が三大コントロールです。風が強いほど引き、弱いほど緩めるのが大原則。「シートで走り、コントロールで形を作る」と覚えます。"],
+      ["ブロックとクリート", "ブロックは滑車、クリートはロープを固定する金具です。テーパーの効いたカムクリートは引けば留まり、上に弾けば外れます。これらの配置と滑りの良さが操作の速さを決めるため、定期的な洗浄と注油は欠かせません。金具の名前と仕組みを知ることは、艇のトラブルを自分で直せることでもあります。"],
+      ["服装と装備", "体温を守るウェットスーツ（夏はロングジョン、冬はセミドライ）、ハイクアウトを支えるハイクパンツ、ロープから手を守るセーリンググローブ、滑らないブーツが基本装備です。海上では交換が利かないため、出艇前の装備点検は艤装の一部。「寒さは判断力を奪う」ので、防寒は技術のうちです。"]
+    ]
+  },
+  {
+    no: "第三章",
+    title: "セーリング理論",
+    en: "Theory of Sailing",
+    desc: "なぜ艇は走るのか。速いセーラーが頭の中に持っている物理の地図です。",
+    topics: [
+      ["見かけの風（アパレントウィンド）", "走っている艇が感じる風は、実際に吹いている風（真の風）と艇の前進が作る風を合成した「見かけの風」です。艇速が上がるほど風は前から吹くように感じられ、強くなります。セールは常にこの見かけの風に合わせます。「速く走るほど、もっと切り上がれる」——この循環がセーリングの面白さの核心です。"],
+      ["揚力と抗力", "セールに沿って流れる風は、翼と同じく流れの曲がりによって揚力を生みます。同時に進行を妨げる抗力も発生します。速く走るとは「揚力を最大に、抗力を最小に」する営みです。セールの角度が浅すぎれば失速（ラフィング）、深すぎれば流れの剥離（ストール）。その間の最良の一点を探し続けるのがトリムです。"],
+      ["テルテールの読み方", "セールに付けた毛糸やテープ（テルテール）は、表面の風の流れを可視化する最重要センサーです。風上側・風下側の両方が後ろへ素直に流れていれば良い流れ。風上側が暴れたら切り上がりすぎかセールの引きすぎ、風下側が暴れたら逆です。「テルテールを流す」ことがトリムの共通言語になります。"],
+      ["セールツイスト", "セールは上に行くほど開く「ねじれ（ツイスト）」を持ちます。上空ほど風が強く、見かけの風の向きが変わるため、高さごとに最適な角度が違うのです。バングやメインシートの引き加減でツイスト量を調整します。「下だけ見ず、セール全体を一枚の翼として整える」のが中級者への壁です。"],
+      ["スロット効果 — メインとジブの関係", "ジブとメインの間の隙間（スロット）を風が通ることで、二枚のセールは互いの流れを整え合います。ジブを引きすぎればメインの裏に風を吹き付けて失速させ、開きすぎれば加速の連携が切れます。2枚のセールは別々の翼ではなく、ひとつの複葉翼。スキッパーとクルーのトリムの対話が必要な理由がここにあります。"],
+      ["ヒールモーメントと復原力", "セールが受ける力は艇を傾けようとし（ヒールモーメント）、乗員の体重がそれに対抗します（復原力）。ハイクアウトとトラピーズは、人間の体重を「生きたバラスト」として使う技術です。風が強いほど乗り出し、足りなければセールの力を逃がす——このバランスの収支が、オーバーパワー時の艇速を決めます。"],
+      ["リーウェイとセンターボードの仕事", "艇は前に進みながら、わずかに風下へも流されています（リーウェイ）。これを最小化するのが水中のセンターボードの揚力です。ヒールした艇はボードの効きが落ちて横流れが増えるため、ここでも「フラットが速い」が効いてきます。見えない水中の翼を意識できるようになると、走りの理解が立体になります。"],
+      ["ウェザーヘルムとバランス", "ティラーを離すと艇が勝手に風上へ切り上がる傾向をウェザーヘルム、風下へ落ちる傾向をリーヘルムと呼びます。適度なウェザーヘルムは舵に手応えを与えますが、強すぎる舵角はブレーキです。セールバランス、マストレーキ、ヒール角でヘルムを整え、「舵がまっすぐで勝手に走る」状態を作るのがチューニングの目標です。"],
+      ["波と艇速", "波は抵抗にも推進力にもなります。アップウィンドでは波に艇を叩かれないようわずかに蛇行し（波を斜めに受ける）、ダウンウィンドでは波の斜面を滑り降りるサーフィンで一気に加速します。フラットウォーターと波の海面では最適なセッティングも走らせ方も別物。「波を読む目」は風を読む目と同じくらい価値があります。"],
+      ["風のシフトとブロー", "風は常に振れて（シフト）、強弱の塊（ブロー・ラル）を伴って吹いています。風が自艇に有利に振れるのがリフト、不利に振れるのがヘッダー。アップウィンドでは「ヘッダーでタック」が原則です。海面の色、さざ波、他艇のヒールから次の風を予測する観測眼が、戦略のすべての出発点になります。"]
+    ]
+  },
+  {
+    no: "第四章",
+    title: "操船の基本技術",
+    en: "Boat Handling",
+    desc: "ふたりの動きをひとつにする。艇を意のままに操るための基本動作です。",
+    topics: [
+      ["出艇と着艇", "出艇は風と波を読み、セールを上げてスロープや浜から海に出る一連の動作です。着艇はその逆で、風位を考えて減速しながら戻ります。岸際は風が乱れ、船や人も多い最も事故の起きやすい場所。「出艇着艇が美しいチームは海上でも強い」と言われるほど、基本動作の完成度が表れます。"],
+      ["クローズホールドの走らせ方", "風上に向かって約45度で切り上がって走る、アップウィンドの基本走法です。スキッパーはテルテールと風を見ながら、わずかな蛇行で「高さ（切り上がり）」と「スピード」の最良点を探り続けます。高さを欲張れば失速し、スピードに流れれば距離を損する——この永遠のトレードオフが470の醍醐味です。"],
+      ["タッキングの手順", "クローズホールドから反対タックのクローズホールドへ、バウを風に通して方向転換します。スキッパーの「タッキング」のコールでクルーがジブを離す準備、回頭、ふたり同時に反対舷へ移動、新しい舷でジブを引き込み加速。理想は艇速を落とさない「ロスのないタック」。何百回の反復で体に刻む動作です。"],
+      ["ジャイブの手順", "風下走行中にスターンを風に通して方向転換します。ブームが反対舷へ勢いよく返るため、スキッパーはメインシートを管理しながら回頭し、クルーはスピンポールの付け替えを行います。強風時のジャイブは470で最も沈（転覆）が起きやすい瞬間。「迷ったら早めに、思い切りよく」が鉄則です。"],
+      ["リーチングとランニング", "風を横〜斜め後ろから受けるリーチングは、470が最も速く走れる風位です。トラピーズとスピンが揃えば、艇はプレーニング（滑走）して水面を飛ぶように走ります。真後ろから風を受けるランニングは一見楽ですが、バランスを崩しやすい繊細な風位。ローリングを抑える集中力が必要です。"],
+      ["体重移動 — 前後トリム", "左右だけでなく前後の体重配置も艇速を左右します。軽風時は前寄りに座ってスターンを持ち上げ、濡れ面積を減らします。強風のダウンウィンドでは後ろに移動してバウの突っ込みを防ぎます。波を越える瞬間の抜重など、ふたりの体はもうひとつの「動くセール」です。"],
+      ["沈と復元（沈起こし）", "ディンギーは転覆（沈）するのが前提の乗り物です。横倒しの半沈ならセンターボードに体重をかけて起こし、マストが真下を向く完沈からも手順通りに復元できます。重要なのは、慌てないこと、艇から絶対に離れないこと、ふたりの位置を常に確認すること。沈起こしの練習は、安全のための最優先科目です。"],
+      ["ロールタック", "軽風時に、艇をあえて大きくヒールさせながらタックし、起こす勢いでセールに風を流して加速するテクニックです。無風に近い海面では、ロールタックの上手さがそのまま順位になります。ルールで許される範囲のキネティクス（体の動きで艇を進める技術）の代表で、軽風の470の必修技です。"],
+      ["減速と停止の技術", "速く走るだけでなく、正確に「止まる・待つ」のも技術です。セールを開いて風を逃すラフィング、メインを押し出して後進をかけるバックなどを使い、スタートライン上で位置をキープします。スタート前の2分間は、この低速コントロールの精度がそのまま勝負になります。"],
+      ["ペアの連携とコール", "470は会話で走る艇です。「ブロー入ります、3、2、1」「タックします」「波越えます」——クルーの観測をスキッパーが判断に変え、動作の予告で息を合わせます。良いペアは互いの動きが予測でき、無言でも艇が乱れません。技術練習と同じだけ、コールの練習に価値があります。"]
+    ]
+  },
+  {
+    no: "第五章",
+    title: "スピンネーカーワーク",
+    en: "Spinnaker Work",
+    desc: "ダウンウィンドの主役。大きな三角の帆を自在に操るクルーの花形仕事です。",
+    topics: [
+      ["スピンネーカーとは", "風下走行時に展開する、軽くて大きな風船状のセールです。470のスピンは左右対称のシンメトリカルタイプで、ポールで風上側の角を支えます。展開すれば艇速は一変し、ダウンウィンドが「我慢の区間」から「攻めの区間」に変わります。スピンを制する者はダウンウィンドを制します。"],
+      ["スピンの艤装", "スピンの3つの角には、ポール側のガイ、反対側のシート、上端のハリヤードが繋がります。出艇前にロープがねじれなく通っているかの確認が必須で、艤装ミスは海上で最も直しにくいトラブルになります。バッグへの畳み方（パッキング）も重要で、次のホイストの成否は畳んだ瞬間に決まっています。"],
+      ["ホイスト（スピンを揚げる）", "上マークを回航したら、クルーがポールをセットし、スキッパーがハリヤードを引いてスピンを揚げます（艇によって分担は逆もあります）。理想は回航と同時に一気に展開して即加速すること。もたつけば後続に上を抑えられます。「マーク3艇身前から準備は終わっている」のが上級チームです。"],
+      ["スピントリムの基本", "スピンは「カール」で合わせます。ラフ（風上側の縁）がわずかに内側へ巻き込む寸前を維持するのが最良のトリムで、シートを常に微調整し続けます。引きすぎたスピンは失速の塊です。ポールの高さと前後位置も風速で変え、スピンが最も「軽く飽む」状態を探します。クルーは下りの間、一瞬も手を止めません。"],
+      ["ランニングの走り", "真風下に近い深い角度では、スピンを風上側に開き気味にし、艇のローリングを抑えながら走ります。470のダウンウィンドは「真っ直ぐ最短」ではなく、風速によって角度を上げて艇速を取るか、深く走って距離を取るかの選択の連続です。ブローが来たら深く、ラルでは上げる——これが基本のセオリーです。"],
+      ["リーチングでのスピン", "風を横寄りから受けるリーチングでは、スピンは前へ引っ張る強力なエンジンになります。プレーニングに入った470は、波を叩く音とともに一気に滑走します。一方でオーバーパワーになりやすく、ブローチング（制御を失って急激に切り上がる現象）と隣り合わせ。攻めと安全の境界線を見極める経験が問われます。"],
+      ["スピンジャイブ", "スピンを張ったままのジャイブは、470のクルーワークの最高難度です。クルーはポールを外し、反対側に付け替える間、スピンを両シートで飛ばし続けます。スキッパーは回頭速度とメインの返しでクルーを助けます。風速が上がるほど精度が要求され、決まれば大きく前へ出る、勝負どころの技術です。"],
+      ["ダウス（スピンを降ろす）", "下マーク回航前にスピンを回収する動作です。早すぎれば距離を損し、遅すぎれば回航が乱れます。クルーはスピンを脇に抱え込みながらバッグへ収め、即座にジブトリムとセンターボード操作へ移ります。「降ろしてから回航までの10秒」が、下マークの順位変動の主戦場です。"],
+      ["スピンのトラブル対処", "ハリヤードへの絡み、フォアステイへの巻き付き、水を掬っての落水（シュリンプ）など、スピンのトラブルは劇的です。共通の対処は、まず艇を安定させ、原因を声に出して共有し、手順を分解して直すこと。パニックで力任せに引くのが最悪手です。トラブルからの復帰の速さも、立派な競技力です。"],
+      ["ダウンウィンドの連携", "下りはクルーがスピンに集中するため、波と風の観測・他艇の位置確認はスキッパーの比重が増します。「ブロー入る、深く行こう」「右から艇来てます」と、上りとは逆方向の情報の流れが生まれます。役割が風位で入れ替わる——この柔軟さこそ、470というふたり乗りの競技の知的な面白さです。"]
+    ]
+  },
+  {
+    no: "第六章",
+    title: "レースの基礎",
+    en: "Racing Basics",
+    desc: "スタート信号からフィニッシュまで。セーリングレースの仕組みと約束事です。",
+    topics: [
+      ["レースの一日の流れ", "出艇申告、海面までの回航、コース確認、試走とライン観測、スタート、レース（通常1日2〜4レース）、帰着申告までがレースの一日です。レースは「スタート前」にかなりの部分が決まっています。風のデータ取り、ラインの有利不利の計測、海面の特徴の把握——海の上の準備時間の使い方が実力です。"],
+      ["コースの形", "470のレースは、風上マークと風下マークを往復する「上下コース（ウィンドワード・リーワード）」や、横の足を加えた「トラペゾイド」で行われます。スタート→上マーク→下マーク→（周回）→フィニッシュが基本形です。風向が変わればマークも打ち直されます。コースは常に「風に対して」設計されているのです。"],
+      ["スタート信号", "スタートは旗と音響で管理されます。クラス旗掲揚（スタート5分前）→準備旗（4分前）→準備旗降下（1分前）→クラス旗降下（スタート）が標準のシークエンスです。時計（防水のセーリングウォッチ）との同期は必須。フライング（早すぎるスタート）には戻り直しやペナルティが課されます。"],
+      ["スタートラインの有利不利", "スタートラインは本部船とブイを結んだ線ですが、風に対して完全に直角とは限りません。風上に出ている側の端（有利エンド）からスタートすれば、それだけで他艇より前に出られます。スタート前にラインの「振れ」を計測し、どこから出るかを決める——スタートは陣取りゲームの開始点です。"],
+      ["スタートの実際", "良いスタートの条件は、①ライン上に正確に位置し、②周囲にクリアな風と加速スペースを確保し、③信号と同時にフルスピードでラインを切ることです。数十艇がひしめく中で自艇の「居場所」を確保し続ける2分間は、レースで最も濃密な時間。「スタートの上手さは練習量に正比例する」と言われます。"],
+      ["上りのレグの進め方", "スタート後は風のシフトとブローを追いながら、タックを重ねて上マークを目指します。ヘッダーでタックし、リフトで伸ばすのが原則ですが、艇団との位置関係やどちらの海面に風があるかも考慮します。「速く走る」と「正しい方向へ走る」の掛け算が上りの成績を決めます。"],
+      ["マーク回航", "マークを回る局面は順位が最も動く場所です。上マークでは回航直後のスピン展開まで含めて計画し、下マークでは「ワイドイン・タイトアウト（広く入って、マークに付けて出る）」で次の上りの風上側を確保します。回航の上手さは、混戦で接触なく自分のスペースを確保するルール理解と一体です。"],
+      ["ルールの基本 — 避航義務", "セーリングは審判が常時並走しない、選手の自己規律で成立する競技です。基本ルールは、①ポートタック艇はスターボードタック艇を避ける、②風上艇は風下艇を避ける、③後ろから追いつく艇は前の艇を避ける、の3つ。権利があっても衝突は避ける義務があります。ルールは武器である前に、安全の共通言語です。"],
+      ["ペナルティと帆走規則", "ルール違反をしたら、その場で自主的に2回転ペナルティ（タックとジャイブを2回ずつ）を履行します。マークに触れたら1回転です。違反を申し立てる場合は「プロテスト」を宣言し、帰着後の審問で裁定されます。正直に回る文化——これがこの競技の品位であり、誇りでもあります。"],
+      ["フィニッシュとシリーズ成績", "フィニッシュラインを横切ってレースは終わり、着順がそのまま得点になります（1位=1点の低得点方式）。シリーズでは複数レースの合計点で争い、最悪の1レースを除外（カット）できるのが一般的です。「全レースを安定して上位で」が王道。一発の勝利より、大崩れしないことが選手権を制します。"]
+    ]
+  },
+  {
+    no: "第七章",
+    title: "戦略と戦術",
+    en: "Strategy & Tactics",
+    desc: "速い艇が勝つとは限らない。風と相手と確率を扱う、海の上の頭脳戦です。",
+    topics: [
+      ["戦略と戦術の違い", "戦略は「風と海面をどう使ってコースを進むか」という自然相手の計画、戦術は「他艇とどう絡むか」という相手との駆け引きです。原則は戦略が主、戦術が従。相手との小競り合いに勝って風の本流を外すのは本末転倒です。「海と戦え、隣の艇と戦うな」が迷ったときの指針になります。"],
+      ["風を読む — 観測の技術", "海面の色（ブローは濃く見える）、さざ波の向き、雲の動き、煙や旗、他艇のヒール角——風の情報は海面のあちこちに書かれています。スタート前に風向を定期的に記録し、振れの周期と幅を掴むのが基本です。「いま吹いている風」ではなく「次に吹く風」を当てるのが観測の目的です。"],
+      ["海面の左右の選択", "上りのレグでは、コースの右と左のどちらが有利かが最大の戦略判断です。風の振れの傾向、地形の影響、潮流、雲の発達を根拠に選びます。確信があれば伸ばし、なければ中央でつなぐ——端に行くほどリターンもリスクも大きくなります。「サイドを決めた理由」を言語化できることが上達の証です。"],
+      ["クリアエアの確保", "前を走る艇のセールは、後方に乱れた風（ブランケット・バックウィンド）の影を落とします。この汚れた風の中では絶対に伸びません。常に自艇のセールにきれいな風が当たる位置（クリアエア）を確保することが、戦術の最優先事項です。スタート直後の30秒は、何よりもまずクリアエアの確保に集中します。"],
+      ["カバーリング", "リードしているとき、後続艇と同じ側の海面を走って風の条件を揃える守りの技術です。真上に付いて風を奪うタイトカバー、同サイドにいるだけのルーズカバーを使い分けます。最終レグやシリーズ終盤、「相手より前」が「絶対順位」より重要な局面で発動する、ポジションゲームの基本です。"],
+      ["レイラインの判断", "レイラインとは、そのままタックせずにマークへ到達できる限界線です。早くレイラインに乗りすぎると、その後のシフトに対応できず、他艇に上に被されるリスクも抱えます。「レイラインは最後の手段、ぎりぎりまで中で勝負」がセオリー。ただし混雑する上マーク手前では、確実に回れる余裕も必要です。"],
+      ["ダウンウィンドの戦略", "下りでも風の強弱と振れは効き続けます。ブローの帯に乗り続けるようにジャイブを重ね、風裏を避け、後続には自艇の風が当たらない位置取りをします。上りで抜けない相手も、下りなら抜ける——470のダウンウィンドは差が付く区間です。スピードに乗りながら頭は冷静に、が合言葉です。"],
+      ["潮流を読む", "海のレースでは、水そのものが動いています。潮が艇団全体を風上や風下へ運ぶため、同じ走りでもマークへの到達は大きく変わります。アンカーを打ったブイの引き波、停泊船の向きで潮を読み、潮汐表で時間変化を頭に入れます。「風は見えるが潮は見えない」からこそ、知識の差がそのまま順位差になります。"],
+      ["混戦の中の判断", "数十艇の艇団では、理想のコースを独占はできません。権利関係（スターボ・ポート）を瞬時に判断し、避ける・交わす・先にタックするの選択を続けます。重要なのは2手先の想像力——「ここでタックしたら、あの艇とどこで再会するか」。ルール知識と空間把握が、混戦での自由度を生みます。"],
+      ["リスク管理", "レースは確率のゲームです。大勝ち狙いの端への単独行は、当たれば爆発的でも外れればビリ。シリーズ全体では、リスクを取る局面（負けていて残り少ない）と取らない局面（リードして守る）を切り替える冷静さが問われます。「攻めの一手」と「事故らない一手」を意図的に選べることが、強さの正体です。"]
+    ]
+  },
+  {
+    no: "第八章",
+    title: "チューニングと艇の手入れ",
+    en: "Tuning & Maintenance",
+    desc: "同じ470でも同じ速さにはならない。艇を速く保つ調整と手入れの知識です。",
+    topics: [
+      ["チューニングという考え方", "470はワンデザイン（同一規格）クラスですが、リグの調整次第でセールの形と艇の性格は大きく変わります。チューニングの目的は「その日の風と波に、セールの形を合わせる」こと。トップチームのセッティング数値（チューニングガイド）を出発点に、自分たちの体重とスタイルに合わせて磨き込んでいきます。"],
+      ["マストレーキ", "マストの前後への傾きをレーキと呼び、ヘルムバランスと帆の重心を決めます。風が強いほどレーキを後ろに倒し、ウェザーヘルムを利用しながらパワーを逃がすのが一般的です。計測はメインハリヤードをスターンまで伸ばして長さで管理します。1cm単位の違いを走りで感じ取れるようになれば本物です。"],
+      ["リグテンション", "シュラウドの張力はマストの曲がりとジブの前縁（ラフ）の張りを決めます。テンションが緩いとジブラフが落ちて上り角度を失い、強すぎると軽風でパワー不足になります。テンションゲージの数値と風速の対応表を持ち、海上でも調整できるのが470の特徴。「風速が変わったらまずリグ」が習慣です。"],
+      ["マストベンドとセールの相性", "マストは硬さと曲がり方に個体差があり、セールはその曲がりを前提にデザインされています。マストとセールの組み合わせ（マッチング）が合わないと、どう引いてもシワが消えない帆になります。プリベンド（事前の曲げ）の量を計測し、セールメーカーの推奨と照らすのがセッティングの基礎工事です。"],
+      ["風域別セッティング", "軽風（〜5kt）はすべてを緩めて深いセールでパワーを稼ぎ、中風（6〜12kt）が最もパワフルな基準設定、強風（13kt〜）はカニンガム・バング・アウトホールを引き込み、平らなセールで力を逃がします。「風が上がったら引く、下がったら緩める」を、どのロープで・どの順に行うかを体系化しておくことが海上での速さです。"],
+      ["セールの管理", "セールは消耗品で、シワ・伸び・紫外線で性能が落ちます。使用後は真水で塩を流して完全に乾かし、たたみジワを避けてロールで保管します。レース用と練習用を分けるのが一般的です。新品のセールが速いのは事実ですが、「セールの状態を言葉で説明できる目」を持つことの方が長期的には価値があります。"],
+      ["ハルの手入れ", "ハル（船体）の水に触れる面の滑らかさは、そのまま抵抗です。使用後の真水洗い、小傷の補修、レース前の磨き上げが基本の手入れです。バウやセンターボードの前縁の小さな欠けも、水流を乱す立派な抵抗源。「艇は手をかけた分だけ走る」は、世界中のセーラーの共通体験です。"],
+      ["FRP補修の基本", "470のハルはFRP（繊維強化プラスチック）製で、小さな破損は自分で直せます。ゲルコートの欠けはパテ埋めと研磨、深い傷はガラスクロスと樹脂で積層します。完璧な修理は職人に任せるとしても、応急修理ができれば遠征先でもレースを続けられます。工具箱と補修材は、チームの装備の一部です。"],
+      ["クラスルールと計測", "470には船体重量、セール寸法、装備などを定めたクラスルールがあり、大きな大会では計測（メジャラーによる検査）があります。ルールの範囲内での工夫がチューニングであり、範囲外は違反です。ルールブックを読む習慣は、合法な高速化のヒントの発見にもつながります。"],
+      ["セッティングノート", "「今日の風速・波・リグ数値・セール・走った感想」を毎回記録するノートは、チームの最強の資産です。データが溜まれば、「この風ならこの数値」が予報を見た瞬間に決まるようになります。感覚を数値で裏打ちし、ペアが代わっても引き継げる——強豪チームには必ず分厚いノートがあります。"]
+    ]
+  },
+  {
+    no: "第九章",
+    title: "体と心の準備",
+    en: "Body & Mind",
+    desc: "艇の性能を引き出すのは人間。フィジカルとメンタル、そして安全の知識です。",
+    topics: [
+      ["セーリングの体力", "470の運動強度は見た目以上です。スキッパーはハイクアウトで腹筋・大腿を、クルーはトラピーズとスピンワークで全身を使い続けます。1日4レースを最終レースまで同じ精度で動ける持久力が、技術を発揮する土台です。「最後の上りで脚が残っているか」が、僅差の順位を分けます。"],
+      ["陸上トレーニング", "ハイクアウトを支える体幹と大腿四頭筋（ハイクベンチでの静的保持）、トラピーズのための背筋と握力、ロープワークのための引く力が470の主要トレーニング対象です。加えて有酸素能力が回復力を支えます。オフシーズンの筋力の貯金が、シーズン中の故障予防にもなります。"],
+      ["体重管理とペアの合計体重", "470はペアの合計体重がおよそ110〜130kg台が競争力のレンジとされ、風域によって有利不利が変わります（軽量ペアは軽風、重量ペアは強風に強い）。無理な増減量ではなく、筋量で最適レンジに収めるのが健全です。体重は艇のバラスト——自分の体も艤装の一部と考えます。"],
+      ["食事と水分", "海上では補給の機会が限られます。レース間に素早く食べられる補給食、こまめな水分、夏は電解質の補給が集中力を守ります。脱水は判断力を最初に奪うため、「喉が渇く前に飲む」が原則です。朝食を抜いて出艇するのは、燃料を積まずに出航するのと同じです。"],
+      ["ペアワークとコミュニケーション", "470の成績は「ふたりの関係の質」と相関します。ミスが起きたときに責めるのではなく、「次どうするか」に即座に切り替えられるペアは崩れません。海上での役割と意思決定の優先順位（最終判断は誰が持つか）を陸で合意しておくこと。技術のすり合わせと同じだけ、対話の習慣が艇速を作ります。"],
+      ["スタート前の心理", "スタート5分前の緊張は、トップ選手でも消えません。ルーティン（ライン計測→風チェック→深呼吸→ポジション確認）を持つことで、緊張を手順に変換します。緊張は敵ではなく、集中の原料です。「いつも通りのことを、いつも通りに」が、海の上のメンタル技術の核心です。"],
+      ["ミスからの回復力", "スタート失敗、沈、ペナルティ——レースにミスはつきものです。差が付くのはミスの後で、引きずるチームは連鎖的に崩れ、切り替えるチームは1艇ずつ拾い直します。「終わったことは採点済み、いまの最善手だけを考える」。リカバリーの速さは才能ではなく、練習で身につく習慣です。"],
+      ["気象の安全判断", "雷雲の接近、急激な風速上昇、視界不良は、即座に撤退を判断すべきシグナルです。出艇前に天気図と予報で「今日の最大リスク」を確認し、海上では空の変化を監視し続けます。「あと1本練習したい」気持ちと安全が衝突したら、必ず安全を選ぶ。海で長く遊ぶための、唯一絶対のルールです。"],
+      ["低体温症と熱中症", "海の上の体温管理は命に関わります。春秋の海水はまだ冷たく、濡れた体に風が当たり続けると低体温症が静かに進行します（判断力低下が初期症状）。夏は直射日光と照り返しで熱中症のリスクが高まります。適切なウェア選択、補給、そして「仲間の様子がおかしい」に気づき合うことが防御線です。"],
+      ["けがの予防", "470で多いのは、ブームによる頭部打撲、ロープによる手の切り傷、ハイクアウトでの腰・膝の慢性障害です。ジャイブ時の頭の位置の習慣化、グローブの着用、乗艇前後のストレッチが基本の予防策です。痛みを我慢しての乗艇はフォームを崩し、さらなる故障を呼びます。体は最も大切な艤装品です。"]
+    ]
+  },
+  {
+    no: "第十章",
+    title: "470とセーリングの世界",
+    en: "The World of Sailing",
+    desc: "海の向こうへ。470の歴史と文化、そしてこの先の楽しみ方の地図です。",
+    topics: [
+      ["470級の歴史", "470は1963年、フランスの設計者アンドレ・コルニュによって生まれました。名前の由来は全長4.70mそのもの。手頃で高性能な2人乗り艇として世界中に普及し、1969年に国際クラスに認定されました。半世紀以上にわたり改良とワンデザインの統制を両立させてきた、ディンギー史の名作です。"],
+      ["オリンピックと470", "470は1976年モントリオール五輪から正式種目となり、1988年からは男女別種目、パリ2024からは男女混合（ミックス）ペア種目になりました。世界のトップが集う最高峰の舞台であり続けています。日本勢もこのクラスでメダルを獲得しており、470は日本セーリング界にとって特別なクラスです。"],
+      ["日本の470シーン", "日本では大学ヨット部の主力クラスとして470が広く使われ、全日本インカレ（全日本学生ヨット選手権）は学生セーラーの最大目標です。社会人やナショナルチームまで競技人口の層が厚く、中古艇の流通や指導の蓄積も豊富。「470が上手いことは日本で最も通用するセーリングの共通語」と言えます。"],
+      ["世界のトップから学ぶ", "世界選手権やオリンピックの470のレース映像は、最高の教材です。スタートの加速、波へのメインシートワーク、ジャイブの足さばき——トップ選手の動作には無駄がありません。近年は艇載カメラやドローン映像も豊富で、世界基準の動きを部室で研究できる時代になりました。"],
+      ["さまざまなクラス", "セーリングには多様な艇種があります。1人乗りのILCA（旧レーザー）、高速スキフの49er、伝統ある2人乗りのスナイプ、水中翼で浮上するモス、大型のクルーザーまで。470で身につけた風の理解と艇の感覚は、どのクラスにもそのまま通用する「共通の母語」です。"],
+      ["レース観戦の楽しみ方", "セーリング観戦のコツは、艇の位置だけでなく「風」を見ることです。海面の濃い部分（ブロー）に入った艇が伸びる、振れた風でタックの判断が分かれる——その因果が見えると、海上のチェスとして観戦できます。世界大会はライブ配信と艇位置のトラッキングで、戦略まで透けて見えます。"],
+      ["ヨットを始める・続ける環境", "セーリングを始める入り口は、大学のヨット部、地域のヨットクラブ・ハーバーのスクール、ジュニアクラブなどがあります。艇とハーバーを共有できるクラブ文化のおかげで、思ったより始めやすいスポーツです。生涯スポーツでもあり、10代から70代まで同じレースを走れる競技は多くありません。"],
+      ["艇の入手と維持", "470は競技人口が多いため中古艇市場が成熟しており、状態の良い中古艇から始めるのが一般的です。維持には艇置き場（ハーバー）の確保、保険、消耗品（ロープ・セール）の更新が必要です。チームや部で共同保有する文化も根付いています。艇は買って終わりではなく、手をかけて速くしていく相棒です。"],
+      ["海のマナーと環境", "ハーバーでの挨拶、出艇着艇時の譲り合い、漁業者や他の海面利用者への配慮は、セーラーの基本マナーです。そして海そのものがフィールドである以上、ゴミを出さない・海洋環境を守る意識は競技の一部です。風と海を借りて遊ぶ——その謙虚さが、セーリング文化の根にあります。"],
+      ["まとめ — 次の一歩へ", "ここまでで、470というフネの仕組み、風の理論、操船とスピンワーク、レースの約束事、戦略、チューニング、体と心、そしてセーリングの世界までを一巡しました。おめでとうございます。次の一歩は海の上にあります。今日学んだことをひとつ選んで、次の乗艇で試してください。良い風を——フェアウィンド！"]
+    ]
+  }
+];
+
+const content = document.getElementById("content");
+const toc = document.getElementById("toc");
+const STORAGE_KEY = "yacht100-progress";
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { progress = {}; }
+
+let num = 0;
+CHAPTERS.forEach((ch, ci) => {
+  const start = num + 1;
+  const section = document.createElement("section");
+  section.className = "chapter";
+  section.id = "ch" + (ci + 1);
+
+  const head = document.createElement("div");
+  head.className = "chapter-head";
+  head.innerHTML = `
+    <div class="chapter-no">${ch.no}</div>
+    <h2>${ch.title}</h2>
+    <div class="chapter-en">${ch.en} ・ ${start} — ${start + ch.topics.length - 1}</div>`;
+  section.appendChild(head);
+
+  const desc = document.createElement("p");
+  desc.className = "chapter-desc";
+  desc.textContent = ch.desc;
+  section.appendChild(desc);
+
+  ch.topics.forEach(([title, body]) => {
+    num++;
+    const n = num;
+    const div = document.createElement("article");
+    div.className = "topic" + (progress[n] ? " done" : "");
+    div.innerHTML = `
+      <div class="topic-head">
+        <span class="topic-num">${String(n).padStart(3, "0")}</span>
+        <h3 class="topic-title">${title}</h3>
+        <button class="stamp" title="読んだら印を押す">${progress[n] ? "読了" : "未読"}</button>
+      </div>
+      <p class="topic-body">${body}</p>`;
+    const stamp = div.querySelector(".stamp");
+    stamp.addEventListener("click", () => {
+      const nowDone = !progress[n];
+      if (nowDone) progress[n] = true; else delete progress[n];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      div.classList.toggle("done", nowDone);
+      stamp.textContent = nowDone ? "読了" : "未読";
+      updateProgress();
+      applyFilters();
+    });
+    section.appendChild(div);
+  });
+
+  content.appendChild(section);
+
+  const link = document.createElement("a");
+  link.href = "#ch" + (ci + 1);
+  link.innerHTML = `<span class="toc-no">${ch.no}</span><span>${ch.title}</span>`;
+  toc.appendChild(link);
+});
+
+function updateProgress() {
+  const done = Object.keys(progress).length;
+  document.getElementById("doneCount").textContent = done;
+  document.getElementById("meterFill").style.width = done + "%";
+  document.getElementById("congrats").classList.toggle("show", done === 100);
+  document.getElementById("cntUnread").textContent = 100 - done;
+  document.getElementById("cntRead").textContent = done;
+}
+updateProgress();
+
+let filterMode = "all";
+const searchBox = document.getElementById("searchBox");
+const emptyNote = document.getElementById("emptyNote");
+
+function applyFilters() {
+  const q = searchBox.value.trim().toLowerCase();
+  let visibleCount = 0;
+  document.querySelectorAll(".topic").forEach((t) => {
+    const matchQ = !q ||
+      t.querySelector(".topic-title").textContent.toLowerCase().includes(q) ||
+      t.querySelector(".topic-body").textContent.toLowerCase().includes(q);
+    const done = t.classList.contains("done");
+    const matchF = filterMode === "all" || (filterMode === "read" ? done : !done);
+    const show = matchQ && matchF;
+    t.style.display = show ? "" : "none";
+    if (show) visibleCount++;
+  });
+  document.querySelectorAll("section.chapter").forEach((s) => {
+    const visible = [...s.querySelectorAll(".topic")].some((t) => t.style.display !== "none");
+    s.style.display = visible ? "" : "none";
+  });
+  if (visibleCount === 0) {
+    emptyNote.textContent =
+      filterMode === "read" ? "読了の項目は、まだありません。" :
+      filterMode === "unread" ? "未読の項目はありません。全て読了です。" :
+      "該当する項目が見つかりませんでした。";
+    emptyNote.classList.add("show");
+  } else {
+    emptyNote.classList.remove("show");
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filterMode = btn.dataset.filter;
+    document.querySelectorAll(".filter-btn").forEach((b) => b.classList.toggle("active", b === btn));
+    applyFilters();
+  });
+});
+
+searchBox.addEventListener("input", applyFilters);
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("読了の記録をすべて白紙に戻しますか？")) return;
+  progress = {};
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll(".topic").forEach((t) => {
+    t.classList.remove("done");
+    t.querySelector(".stamp").textContent = "未読";
+  });
+  updateProgress();
+  applyFilters();
+});
+</script>
+</body>
+</html>
