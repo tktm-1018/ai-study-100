@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>プログラミングの知識、1から100。— ゼロから学ぶプログラミング読本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f8f5ee;
+    --paper-deep: #f1ecdf;
+    --ink: #211d16;
+    --ink-soft: #5c564a;
+    --line: #ddd5c4;
+    --vermilion: #2c557e;
+    --vermilion-soft: #e2e8ef;
+    --serif: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
+    --gothic: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--gothic);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 2;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--vermilion); color: var(--paper); }
+
+  /* ---------- 表紙 ---------- */
+  .cover {
+    border-bottom: 1px solid var(--line);
+    padding: 72px 24px 72px;
+    position: relative;
+  }
+  .cover::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--vermilion);
+  }
+  .cover-inner { max-width: 920px; margin: 0 auto; }
+  .series {
+    display: flex;
+    gap: 22px;
+    align-items: baseline;
+    margin-bottom: 56px;
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+  }
+  .series-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    padding: 2px 10px;
+  }
+  .series a { color: var(--ink-soft); text-decoration: none; padding-bottom: 3px; }
+  .series a:hover { color: var(--vermilion); }
+  .series a.current {
+    color: var(--ink);
+    font-weight: 700;
+    border-bottom: 2px solid var(--vermilion);
+  }
+  .cover-eyebrow {
+    font-family: var(--gothic);
+    font-size: 0.72rem;
+    letter-spacing: 0.42em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .cover h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2.2rem, 6.4vw, 4.2rem);
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+  }
+  .cover h1 .num { color: var(--vermilion); }
+  .cover-lead {
+    margin-top: 36px;
+    max-width: 36em;
+    font-size: 0.95rem;
+    line-height: 2.3;
+    color: var(--ink-soft);
+  }
+  .cover-seal {
+    position: absolute;
+    right: max(24px, calc((100% - 920px) / 2));
+    bottom: 64px;
+    width: 92px;
+    height: 92px;
+    border: 2.5px solid var(--vermilion);
+    border-radius: 50%;
+    color: var(--vermilion);
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transform: rotate(6deg);
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 720px) {
+    .cover { padding: 48px 20px 56px; }
+    .cover-seal { position: static; transform: rotate(6deg); margin: 40px 0 0 auto; }
+  }
+
+  /* ---------- 読了メーター ---------- */
+  .meter {
+    border-bottom: 1px solid var(--line);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .meter-inner {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .meter-label {
+    font-family: var(--serif);
+    font-size: 0.88rem;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .meter-label strong { color: var(--vermilion); font-size: 1.15rem; margin: 0 2px; }
+  .meter-track { flex: 1; height: 2px; background: var(--line); position: relative; }
+  .meter-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    background: var(--vermilion);
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ---------- 本文レイアウト ---------- */
+  .layout {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 64px 24px 96px;
+    display: flex;
+    gap: 72px;
+  }
+  main { flex: 1; min-width: 0; max-width: 820px; }
+
+  nav.toc {
+    width: 200px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 78px;
+    align-self: flex-start;
+    font-size: 0.82rem;
+  }
+  nav.toc .toc-title {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--ink);
+  }
+  nav.toc a {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding: 7px 0;
+    border-bottom: 1px solid var(--line);
+    line-height: 1.6;
+  }
+  nav.toc a:hover { color: var(--vermilion); }
+  nav.toc .toc-no {
+    font-family: var(--serif);
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  nav.toc a:hover .toc-no { color: var(--vermilion); }
+  @media (max-width: 920px) {
+    .layout { flex-direction: column; gap: 48px; }
+    nav.toc { position: static; width: 100%; }
+  }
+
+  /* 検索・絞り込み */
+  .search-wrap {
+    margin-bottom: 72px;
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 2px;
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    background: transparent;
+    font-family: var(--gothic);
+    font-size: 0.95rem;
+    color: var(--ink);
+    border-radius: 0;
+  }
+  .search-box::placeholder { color: #a39b89; }
+  .search-box:focus { outline: none; border-bottom: 2px solid var(--vermilion); }
+
+  .filter-tabs { display: flex; align-items: baseline; }
+  .filter-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: var(--serif);
+    font-size: 0.92rem;
+    letter-spacing: 0.18em;
+    color: #a39b89;
+    padding: 10px 4px 8px;
+    margin-left: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .filter-tabs .filter-btn:first-child { margin-left: 0; }
+  .filter-btn:hover { color: var(--vermilion); }
+  .filter-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--vermilion);
+    font-weight: 700;
+  }
+  .filter-btn .cnt {
+    font-size: 0.72rem;
+    color: #a39b89;
+    margin-left: 4px;
+    letter-spacing: 0.05em;
+    font-feature-settings: "tnum";
+  }
+  .empty-note {
+    display: none;
+    font-family: var(--serif);
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .empty-note.show { display: block; }
+
+  /* 章 */
+  section.chapter { margin-bottom: 96px; }
+  .chapter-head { margin-bottom: 16px; }
+  .chapter-no {
+    font-family: var(--serif);
+    font-size: 0.85rem;
+    letter-spacing: 0.5em;
+    color: var(--vermilion);
+    margin-bottom: 14px;
+  }
+  .chapter-head h2 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 4vw, 2.2rem);
+    letter-spacing: 0.08em;
+    line-height: 1.5;
+  }
+  .chapter-en {
+    font-size: 0.68rem;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #a39b89;
+    margin-top: 10px;
+  }
+  .chapter-desc {
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+    margin: 22px 0 36px;
+    padding-left: 18px;
+    border-left: 2px solid var(--vermilion);
+    line-height: 2.1;
+  }
+
+  /* 項目 */
+  .topic {
+    border-top: 1px solid var(--line);
+    padding: 30px 0 32px;
+  }
+  section.chapter .topic:last-child { border-bottom: 1px solid var(--line); }
+  .topic-head {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+  }
+  .topic-num {
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #b5ac98;
+    letter-spacing: 0.05em;
+    min-width: 2.6em;
+    font-feature-settings: "tnum";
+    transition: color 0.3s;
+  }
+  .topic.done .topic-num { color: var(--vermilion); }
+  .topic-title {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: 1.18rem;
+    letter-spacing: 0.05em;
+    line-height: 1.7;
+    flex: 1;
+  }
+  .topic-body {
+    margin-top: 14px;
+    padding-left: calc(2.6em * 1.5 / 1 + 18px);
+    font-size: 0.92rem;
+    line-height: 2.15;
+    color: #3d382e;
+    max-width: 40em;
+  }
+  @media (max-width: 720px) {
+    .topic-body { padding-left: 0; }
+  }
+
+  /* 読了印 */
+  .stamp {
+    flex-shrink: 0;
+    width: 52px;
+    height: 52px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: #b5ac98;
+    font-family: var(--serif);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.25s ease;
+    line-height: 1.4;
+    padding: 0;
+  }
+  .stamp:hover { border-color: var(--vermilion); color: var(--vermilion); }
+  .topic.done .stamp {
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    background: var(--vermilion-soft);
+    transform: rotate(-8deg);
+    font-weight: 700;
+  }
+
+  /* 奥付 */
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 56px 24px 72px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+  }
+  footer .colophon-title {
+    font-family: var(--serif);
+    letter-spacing: 0.4em;
+    color: var(--ink);
+    margin-bottom: 18px;
+    font-size: 0.9rem;
+  }
+  footer .series-foot { margin-top: 16px; }
+  footer .series-foot a { color: var(--vermilion); text-decoration: none; font-family: var(--serif); }
+  footer .series-foot a:hover { text-decoration: underline; }
+  .reset-btn {
+    margin-top: 24px;
+    background: none;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    font-family: var(--gothic);
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    padding: 8px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .reset-btn:hover { border-color: var(--vermilion); color: var(--vermilion); }
+
+  .congrats {
+    display: none;
+    margin: 0 auto 48px;
+    max-width: 820px;
+    border: 2px solid var(--vermilion);
+    color: var(--vermilion);
+    font-family: var(--serif);
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+  }
+  .congrats.show { display: block; }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="cover-inner">
+    <nav class="series">
+      <span class="series-label">シリーズ</span>
+      <a href="index.html">第一巻　ＡＩ編</a>
+      <a href="programming.html" class="current">第二巻　プログラミング編</a>
+    </nav>
+    <p class="cover-eyebrow">Programming — A Reader's Guide</p>
+    <h1>プログラミングの知識、<br><span class="num">１</span>から<span class="num">１００</span>。</h1>
+    <p class="cover-lead">コードを書くということを、いちばん最初から、いちばん遠くまで。変数のことば、アルゴリズムの考えかた、道具の使いかた、良いコードの流儀まで——百の話題を、一冊の本のように編みました。気に入った頁から、どうぞ。</p>
+  </div>
+  <div class="cover-seal">全百項<br>収録</div>
+</header>
+
+<div class="meter">
+  <div class="meter-inner">
+    <span class="meter-label">読了 <strong id="doneCount">0</strong>／100</span>
+    <div class="meter-track"><div class="meter-fill" id="meterFill"></div></div>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="toc" id="toc">
+    <div class="toc-title">目次</div>
+  </nav>
+  <main>
+    <div class="search-wrap">
+      <input type="search" class="search-box" id="searchBox" placeholder="ことばで探す — 変数、Git、アルゴリズム …">
+      <div class="filter-tabs" role="tablist">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="unread">未読<span class="cnt" id="cntUnread"></span></button>
+        <button class="filter-btn" data-filter="read">読了<span class="cnt" id="cntRead"></span></button>
+      </div>
+    </div>
+    <div class="congrats" id="congrats">全百項、読了。お見事です。</div>
+    <p class="empty-note" id="emptyNote"></p>
+    <div id="content"></div>
+  </main>
+</div>
+
+<footer>
+  <p class="colophon-title">奥付</p>
+  <p>プログラミングの知識、１から１００。— 読了の印は、この端末にだけ静かに残ります。</p>
+  <p class="series-foot">姉妹巻：<a href="index.html">ＡＩの知識、１から１００。</a></p>
+  <button class="reset-btn" id="resetBtn">読了の記録を白紙に戻す</button>
+</footer>
+
+<script>
+const CHAPTERS = [
+  {
+    no: "第一章",
+    title: "プログラミングの基礎",
+    en: "First Steps",
+    desc: "プログラムとは何か。コードを書くための最初の語彙をそろえます。",
+    topics: [
+      ["プログラミングとは何か", "プログラミングとは、コンピュータにやらせたい処理を、コンピュータが実行できる形式の指示書（プログラム）として書くことです。コンピュータは曖昧さを理解できないため、手順を正確に、漏れなく記述する必要があります。「やりたいことを、誰がやっても同じになる手順に分解する力」がプログラミングの本質です。"],
+      ["プログラミング言語", "人間が読み書きしやすい形でコンピュータへの指示を書くための言語です。Python、JavaScript、Javaなど数百種類が存在し、それぞれ得意分野や文法が異なります。どの言語も最終的には機械語（0と1）に変換されて実行されます。自然言語と違い、文法の誤りが一文字でもあれば動かない厳密さが特徴です。"],
+      ["ソースコードと実行", "プログラミング言語で書かれたテキストを「ソースコード」と呼びます。これを実行する方式は2つあり、事前に機械語へ一括変換する「コンパイル方式」（C、Javaなど）と、実行しながら逐次解釈する「インタプリタ方式」（Python、JavaScriptなど）があります。前者は高速、後者は手軽さが持ち味です。"],
+      ["変数 — 値に名前をつける", "変数とは、数値や文字列などの値に名前をつけて保管しておく箱のようなものです。「price = 300」と書けば、以後「price」という名前でその値を呼び出したり変更したりできます。プログラムは変数の値を読み書きしながら進んでいくため、変数はあらゆるプログラムの最小単位の部品です。"],
+      ["データ型", "値には「種類」があります。整数（int）、小数（float）、文字列（string）、真偽値（true/false のboolean）などが基本のデータ型です。「1 + 1」は2ですが「\"1\" + \"1\"」は文字列の連結で「11」になる、というように、型を意識しないと思わぬバグを生みます。型はプログラムの正しさを守る土台です。"],
+      ["演算子と式", "値を計算したり比較したりする記号を演算子と呼びます。四則演算（+ - * /）、余りを求める「%」、比較（== < >）、論理演算（and / or / not）などがあります。演算子と値を組み合わせたものが「式」で、式は必ず一つの値に評価されます。条件判定も計算も、すべては式の評価の積み重ねです。"],
+      ["条件分岐（if文）", "「もし〜なら、こうする。そうでなければ、ああする」という処理の枝分かれを実現するのがif文です。例えば「年齢が20以上なら入場可、未満なら不可」のような判断をコードで表現できます。プログラムが状況に応じて賢く振る舞えるのは、この条件分岐があるからです。"],
+      ["繰り返し（ループ）", "同じ処理を何度も実行する仕組みで、for文やwhile文が代表です。「リストの全商品について価格を合計する」「条件を満たすまで試行を続ける」といった処理を数行で書けます。人間が苦手な単純作業の大量反復こそコンピュータの本領であり、ループはその力を引き出す構文です。"],
+      ["関数 — 処理に名前をつける", "ひとまとまりの処理に名前をつけて再利用できるようにしたものが関数です。入力（引数）を受け取り、処理をして、結果（戻り値）を返します。同じコードを何度も書かずに済み、プログラムの見通しも良くなります。「大きな問題を関数という小さな部品に分割する」ことが、設計の基本です。"],
+      ["エラーとバグ", "プログラムが思い通りに動かない原因には、文法の誤りで実行すらできない「構文エラー」、実行中に起きる「実行時エラー」、動くけれど結果が間違っている「論理バグ」があります。エラーは敵ではなく、問題の場所を教えてくれる手がかりです。エラーメッセージを読む習慣が、上達の最短ルートです。"]
+    ]
+  },
+  {
+    no: "第二章",
+    title: "データ構造とアルゴリズム",
+    en: "Data Structures & Algorithms",
+    desc: "データの持ち方と処理の手順。プログラミングの「考える力」を支える教養です。",
+    topics: [
+      ["データ構造とは", "データをどんな形で保持するかの設計をデータ構造と呼びます。同じデータでも、並べ方や繋ぎ方によって「探す」「追加する」「削除する」の速さが大きく変わります。問題に合ったデータ構造を選ぶことは、優れたアルゴリズムを選ぶことと同じくらい、プログラムの性能を左右します。"],
+      ["配列とリスト", "複数の値を順番に並べて格納する、最も基本的なデータ構造です。各要素には0から始まる「添字（インデックス）」でアクセスします。配列は位置指定の読み取りが高速な一方、途中への挿入は苦手です。多くの言語ではサイズを自動で伸縮できるリスト（動的配列）が標準装備されています。"],
+      ["スタックとキュー", "データの出し入れの順序に決まりを持たせた構造です。スタックは「後入れ先出し（LIFO）」で、皿の積み重ねのように最後に入れたものから取り出します。キューは「先入れ先出し（FIFO）」で、行列のように先に並んだものから処理します。関数呼び出しの管理や処理の順番待ちなど、随所で使われています。"],
+      ["ハッシュテーブル（辞書）", "「キー」と「値」のペアでデータを保存する構造で、Pythonでは辞書（dict）、JavaScriptではオブジェクトやMapと呼ばれます。キーから値を取り出す操作がデータ量によらずほぼ一定時間で行える点が最大の強みです。「名前から電話番号を引く」ような検索が一瞬で済む、実務で最も活躍する構造の一つです。"],
+      ["木構造", "親子関係でデータを階層的につなぐ構造です。フォルダとファイルの関係、HTMLの要素の入れ子、組織図などはすべて木構造です。検索を高速化する二分探索木、データベースのインデックスに使われるB木など、応用範囲は広大です。「階層があるものは木で表せる」と覚えておくと設計に役立ちます。"],
+      ["グラフ", "ノード（点）とエッジ（線）で「つながり」を表す構造です。駅と路線、Webページとリンク、SNSの友人関係など、ネットワーク状のものはすべてグラフで表現できます。最短経路を求めるダイクストラ法など、グラフ上のアルゴリズムは地図アプリやSNSのおすすめ機能の心臓部です。"],
+      ["アルゴリズムと計算量", "アルゴリズムとは問題を解く手順、計算量とはその手順の効率を表す尺度です。データ量nに対して処理時間がどう増えるかを「O(n)」「O(n²)」のような記法（オーダー記法）で表します。データが100万件になったとき、O(n)とO(n²)の差は1万倍。アルゴリズムの良し悪しは、ハードウェアの性能差を簡単に飲み込みます。"],
+      ["ソート（並べ替え）", "データを順序通りに並べ替える、最も研究されてきた基本アルゴリズムです。単純なバブルソートはO(n²)、実用的なクイックソートやマージソートはO(n log n)で動作します。実務では言語標準のsort関数を使えば十分ですが、その裏の仕組みを知っていることが「計算量の感覚」を養います。"],
+      ["探索 — 線形探索と二分探索", "データの中から目的の値を見つける操作です。端から順に調べる線形探索はO(n)、ソート済みのデータを半分ずつ絞り込む二分探索はO(log n)で、100万件でも約20回の比較で見つかります。「辞書を引くとき真ん中から開く」のが二分探索の直感です。前提条件（ソート済みか）で手法が変わる好例でもあります。"],
+      ["再帰 — 自分自身を呼ぶ関数", "関数が自分自身を呼び出して問題を解く技法です。「フォルダの中のフォルダの中の…」のような入れ子構造の処理や、大きな問題を同じ形の小さな問題に分割する場面で威力を発揮します。必ず「終了条件」を書かないと無限に呼び出し続けてしまう点が要注意。木構造の処理と相性抜群です。"]
+    ]
+  },
+  {
+    no: "第三章",
+    title: "プログラミング言語の世界",
+    en: "Languages & Paradigms",
+    desc: "数ある言語の個性と、その背後にある考え方（パラダイム）を知ります。",
+    topics: [
+      ["言語の選び方", "プログラミング言語に唯一の正解はなく、「何を作るか」で選びます。Web画面ならJavaScript、データ分析やAIならPython、iPhoneアプリならSwift、業務システムならJavaやC#が定番です。重要なのは、1つの言語で基礎を固めれば2つ目以降の習得は格段に速くなること。最初の言語選びに悩みすぎる必要はありません。"],
+      ["Python", "シンプルで読みやすい文法を持ち、初学者から研究者まで世界で最も広く使われる言語の一つです。データ分析、AI・機械学習、Web開発、自動化スクリプトと守備範囲が広く、ライブラリの充実度は随一です。インデント（字下げ）が文法の一部になっており、誰が書いても見た目が揃いやすいのも特徴です。"],
+      ["JavaScriptとTypeScript", "JavaScriptはブラウザで動く唯一の標準言語で、Webページに動きをつけるために生まれました。現在はNode.jsによりサーバー側でも動き、Web開発の共通語となっています。TypeScriptはJavaScriptに型の仕組みを加えた拡張版で、大規模開発での安全性を高めます。実務のフロントエンド開発ではTypeScriptが標準になりつつあります。"],
+      ["JavaとC#", "どちらも大規模な業務システムやAndroidアプリ（Java）、ゲーム開発（C#とUnity）で使われる、型に厳格なオブジェクト指向言語です。コンパイル時に多くの誤りを検出でき、数十人規模のチーム開発に向きます。歴史が長く求人も多いため、エンタープライズの世界では今も中心的な存在です。"],
+      ["CとC++、Rust", "ハードウェアに近い層を扱う低レイヤー言語です。OSやゲームエンジン、組み込み機器など、速度とメモリ制御が命の領域で使われます。C/C++はメモリ管理を人間が行うため強力ですが危険も伴い、その安全性問題を言語設計で解決したRustが近年急速に支持を集めています。"],
+      ["静的型付けと動的型付け", "変数の型をコンパイル時に固定するのが静的型付け（Java、TypeScript、Rustなど）、実行時に柔軟に決まるのが動的型付け（Python、Rubyなど）です。静的型は大規模開発での安全性とエディタ支援に優れ、動的型は素早い試作に向きます。近年は動的言語に型ヒントを加える折衷が主流で、両者の境界は薄れつつあります。"],
+      ["オブジェクト指向プログラミング", "データ（属性）とそれを操作する処理（メソッド）を「オブジェクト」としてひとまとめにする設計思想です。「クラス」という設計図からオブジェクトを生成し、継承やカプセル化といった仕組みで大きなプログラムを整理します。現実世界のモノに対応づけて考えられるため、大規模システムの主流な設計手法であり続けています。"],
+      ["関数型プログラミング", "「状態を変更する」のではなく「値を変換する関数の組み合わせ」でプログラムを構成する考え方です。同じ入力には必ず同じ出力を返す純粋な関数を重視し、バグの温床になりやすい「いつの間にか変わっている変数」を減らします。map/filterのような関数型由来の道具は、今やほとんどの言語に輸入されています。"],
+      ["ライブラリとフレームワーク", "ライブラリは「便利な部品集」、フレームワークは「アプリの骨組みごと提供する基盤」です。日付処理のライブラリを呼び出すのは自分のコードですが、Webフレームワークでは骨組み側が自分のコードを呼び出します（制御の逆転）。車輪の再発明を避け、巨人の肩に乗ることが現代開発の大前提です。"],
+      ["パッケージマネージャ", "他人が作ったライブラリを導入・更新・管理するツールです。Pythonのpip、JavaScriptのnpm、Rustのcargoなどが代表で、コマンド一つで世界中の部品を取り込めます。依存関係（ライブラリが必要とするライブラリ）を自動解決してくれる一方、依存の鎖が招くセキュリティリスクへの注意も必要です。"]
+    ]
+  },
+  {
+    no: "第四章",
+    title: "Web開発",
+    en: "Web Development",
+    desc: "ブラウザの向こう側で何が起きているのか。Webアプリの仕組みを学びます。",
+    topics: [
+      ["Webの仕組み — HTTP", "WebはブラウザとサーバーがHTTPという約束事（プロトコル）で会話することで成り立っています。ブラウザが「このページをください」とリクエストを送り、サーバーがHTMLなどのレスポンスを返す——この往復がWebの基本動作です。URLの構造、GETとPOSTの違い、ステータスコード（404など）はこの会話の語彙です。"],
+      ["HTML — ページの構造", "HyperText Markup Languageの略で、Webページの構造と内容を記述する言語です。見出し（h1）、段落（p）、リンク（a）、画像（img）などの「タグ」で文書に意味づけをします。プログラミング言語ではなくマークアップ言語ですが、Webに関わるすべての職種に必須の共通言語です。"],
+      ["CSS — 見た目の設計", "Cascading Style Sheetsの略で、HTMLで作った構造に色・余白・配置・文字などの装飾を与える言語です。「セレクタで要素を選び、プロパティで装飾する」のが基本形。FlexboxやGridによるレイアウト、レスポンシブ対応（画面幅に応じた表示切替）など、現代のWebの美しさはCSSが担っています。"],
+      ["ブラウザとJavaScript", "JavaScriptはブラウザの中で動き、ページに対話性を与えます。ボタンを押したら表示が変わる、入力中にエラーを表示する、サーバーから追加データを取得して画面を更新する（非同期通信）——こうした「動くWeb」はすべてJavaScriptの仕事です。ページの構造（DOM）をプログラムから書き換えるのが基本動作です。"],
+      ["フロントエンドとバックエンド", "Web開発は、ユーザーの目に見える画面側（フロントエンド：HTML/CSS/JavaScript）と、データ処理やビジネスロジックを担うサーバー側（バックエンド：Python、Go、Javaなど＋データベース）に分かれます。両方を扱う人をフルスタックエンジニアと呼びます。役割分担とその間の通信（API）の設計が、Webアプリ設計の核心です。"],
+      ["API — プログラム同士の窓口", "Application Programming Interfaceの略で、プログラム同士が機能やデータをやり取りするための窓口です。Webでは「URLにリクエストを送るとJSONでデータが返る」REST APIが標準的です。天気情報、地図、決済——世の中のサービスの多くがAPIとして提供されており、APIを組み合わせるだけでも実用的なアプリが作れます。"],
+      ["JSONとデータ交換", "JavaScript Object Notationの略で、データを「キーと値」のテキストで表現する軽量フォーマットです。人間にも読みやすく、ほぼすべての言語で扱えるため、API通信や設定ファイルの事実上の標準となっています。「フロントとバックの間を流れる血液」のような存在で、Web開発では毎日触れることになります。"],
+      ["フロントエンドフレームワーク", "ReactやVue、Svelteなど、複雑な画面を効率よく作るための骨組みです。「データが変わったら画面も自動で変わる」宣言的UIという考え方により、画面の状態管理が劇的に楽になりました。コンポーネント（部品）単位で画面を組み立てるスタイルは、現代フロントエンド開発の標準です。"],
+      ["認証とセッション", "「このリクエストは誰からのものか」を確かめる仕組みです。ログインの背後では、パスワードのハッシュ化保存、セッションIDやトークン（JWT）の発行、Cookieによる状態の維持などが行われています。GoogleアカウントでログインするOAuthのような委任の仕組みも広く使われます。セキュリティの最前線であり、自作より実績ある仕組みの利用が鉄則です。"],
+      ["Webセキュリティの基礎", "Webアプリには定番の攻撃手法があります。データベースを乗っ取るSQLインジェクション、悪意あるスクリプトを埋め込むXSS、ユーザーになりすまして操作させるCSRFなどが代表です。対策の原則は「外部からの入力をすべて疑う」こと。エスケープ処理やフレームワークの保護機能を正しく使うことが開発者の責務です。"]
+    ]
+  },
+  {
+    no: "第五章",
+    title: "データベース",
+    en: "Databases",
+    desc: "アプリの記憶を司る仕組み。データの保存と検索の作法を学びます。",
+    topics: [
+      ["データベースとは", "大量のデータを安全に保存し、高速に検索・更新するための専用ソフトウェアです。ファイルに直接書き込む方式と違い、複数人からの同時アクセス、障害時の復旧、データの整合性維持などを引き受けてくれます。ほぼすべてのWebサービスやアプリの裏側で、データベースが動いています。"],
+      ["リレーショナルデータベースとSQL", "データを行と列を持つ「テーブル（表）」で管理し、テーブル同士を関連づける方式が最も広く使われています。MySQL、PostgreSQLなどが代表です。操作にはSQLという専用言語を使い、「SELECT 名前 FROM 顧客 WHERE 年齢 > 20」のように宣言的に書きます。SQLは職種を問わず役立つ、最も汎用性の高いスキルの一つです。"],
+      ["テーブル設計と正規化", "どんなテーブルにどんな列を持たせるかの設計が、システムの寿命を左右します。正規化とは「同じ情報を複数の場所に重複して持たない」ように表を分割する原則です。顧客名を注文テーブルにも顧客テーブルにも書いてしまうと、変更時に不整合が生じます。正規化はデータの矛盾を構造的に防ぐ知恵です。"],
+      ["主キーと外部キー", "主キーは各行を一意に特定するID（顧客番号など）、外部キーは他のテーブルの主キーを参照する列（注文テーブルの顧客番号など）です。この参照の仕組みでテーブル同士がつながり、「この注文はどの顧客のものか」を辿れます。リレーショナル（関係）データベースという名前は、この関連づけに由来します。"],
+      ["JOINと集計", "複数のテーブルを関連づけて一度に取得するのがJOIN、データをまとめて数えるのがGROUP BYなどの集計です。「顧客ごとの注文金額合計」のような問いはこの2つの組み合わせで答えられます。実務のSQLの大半はSELECT＋JOIN＋集計でできており、ここを使いこなせれば日々のデータ抽出には困りません。"],
+      ["インデックス — 検索の高速化", "本の索引と同じように、特定の列の値から行を高速に見つけるための補助構造です。インデックスがないと全行を調べる必要があり、100万件のデータでは致命的な遅さになります。ただし張りすぎると書き込みが遅くなるトレードオフもあります。「遅いSQLはまずインデックスを疑う」が実務の定石です。"],
+      ["トランザクション", "「銀行口座Aから引いてBに足す」のような一連の処理を、全部成功か全部なかったことにするかのどちらかに保証する仕組みです。途中で障害が起きても中途半端な状態を残しません。この性質はACID特性と呼ばれ、お金や在庫など「絶対に矛盾してはいけないデータ」を扱う基盤となっています。"],
+      ["NoSQLデータベース", "表形式にこだわらないデータベースの総称です。JSONのような文書で保存するMongoDB、キーと値だけの高速なRedis、大規模分散に強いCassandraなどがあります。柔軟な構造や桁違いのスケールが必要な場面で活躍しますが、万能ではありません。「基本はリレーショナル、特性が合う場面でNoSQL」が定番の使い分けです。"],
+      ["ORMとマイグレーション", "ORM（Object-Relational Mapping）は、SQLを直接書かずにプログラムのオブジェクトとしてデータベースを操作できる仕組みです。マイグレーションは、テーブル構造の変更履歴をコードで管理し、どの環境でも同じ構造を再現する仕組みです。どちらも現代のWebフレームワークには標準装備されています。"],
+      ["バックアップとデータの寿命", "データは消える前提で備えます。定期バックアップ、変更履歴の保全、リストア（復元）手順の検証が基本です。「バックアップを取っていたのに復元できなかった」は実際によく起きる悲劇で、復元のテストまでがバックアップです。データはコードより長生きします。アプリを書き換えてもデータは引き継がれ続けるのです。"]
+    ]
+  },
+  {
+    no: "第六章",
+    title: "開発ツールと環境",
+    en: "Tools & Environment",
+    desc: "プロの道具箱。毎日の開発を支えるツールの使い方と思想を学びます。",
+    topics: [
+      ["ターミナルとコマンドライン", "マウスではなく文字のコマンドでコンピュータを操作する画面です。ファイル操作（cd、ls、mkdir）、プログラムの実行、ツールの導入など、開発作業の多くはここで行います。最初は無愛想に見えますが、GUIより速く、自動化でき、サーバー操作には必須です。開発者の母国語のような環境です。"],
+      ["エディタとIDE", "コードを書く道具です。VS Codeのような高機能エディタは、シンタックスハイライト、補完、定義ジャンプ、デバッグ機能を備えます。IDE（統合開発環境）はさらに言語特化の支援が厚いツールです。近年はAI補完（GitHub Copilotなど）が標準装備になりつつあり、エディタは「AIと共同作業する場所」へ進化しています。"],
+      ["Git — バージョン管理", "コードの変更履歴を記録するシステムです。「いつ、誰が、何を、なぜ変えたか」をコミットとして積み重ね、任意の時点に戻れます。失敗を恐れず変更できる安全網であり、複数人開発の土台です。現代の開発でGitを使わない現場はほぼ存在せず、プログラミング言語より先に学ぶ価値があるとさえ言われます。"],
+      ["GitHubとプルリクエスト", "Gitのリポジトリを共有するクラウドサービスで、世界最大のコード共有プラットフォームです。変更の取り込み依頼「プルリクエスト」を介して、コードレビューと議論をしてから合流させる開発スタイルが標準です。オープンソースへの貢献も就職活動のポートフォリオも、ここが舞台になります。"],
+      ["ブランチとマージ", "ブランチは開発の流れを分岐させる機能です。本流（main）を安定に保ったまま、機能追加や実験を別の枝で進め、完成したら合流（マージ）します。複数人が同じファイルを変更すると競合（コンフリクト）が起きますが、これは異常ではなく日常です。落ち着いて差分を読み、意図を統合する技術も開発スキルの一部です。"],
+      ["デバッグの技術", "バグの原因を突き止めて直す技術です。print文で変数の中身を確認する原始的だが強力な方法、ブレークポイントで実行を一時停止するデバッガ、エラーメッセージとスタックトレースの読解が三種の神器です。「思い込みを捨てて、事実（実際の値）を確認する」という科学的態度が何より重要です。"],
+      ["テストの自動化", "コードが正しく動くことを検証するコードを書き、自動で何度でも実行できるようにする実践です。関数単位のユニットテスト、複数部品を通した統合テストなどがあります。テストがあれば、変更で何かが壊れたとき即座に気づけます。「動くか不安で触れない」コードを作らないための、未来への投資です。"],
+      ["CI/CD — 継続的インテグレーション", "コードをプッシュするたびに、テスト・ビルド・デプロイを自動実行する仕組みです（GitHub Actionsなどで構築）。人間の「うっかり」を排除し、小さな変更を頻繁に安全にリリースできるようになります。「マージしたら自動でテストが走り、通れば自動で本番に反映」が現代の理想形です。"],
+      ["コンテナ（Docker）", "アプリとその実行環境を丸ごとパッケージにして、どこでも同じように動かす技術です。「自分のPCでは動いたのに」問題を根本から解決します。開発環境の配布、本番サーバーへのデプロイ、マイクロサービスの実行基盤として標準になりました。設計図（Dockerfile）から同じ環境を何度でも再現できます。"],
+      ["クラウドコンピューティング", "サーバーやデータベースを自前で持たず、AWS・Google Cloud・Azureなどから必要な分だけ借りる方式です。数クリックで世界中にサーバーを立て、使った分だけ支払います。インフラの調達が「購入」から「コード」に変わり（IaC）、個人でも世界規模のサービスを運営できる時代の基盤です。"]
+    ]
+  },
+  {
+    no: "第七章",
+    title: "良いコードを書く",
+    en: "Writing Good Code",
+    desc: "動くだけでは半分。読みやすく、変更しやすいコードの流儀を学びます。",
+    topics: [
+      ["可読性 — コードは読まれるために書く", "コードは書く時間より読まれる時間の方が圧倒的に長い、と言われます。半年後の自分や同僚が読んで一発で理解できるかが品質の核心です。奇抜なテクニックで行数を縮めるより、平易で意図が明確なコードの方が価値があります。「動く」は最低条件で、「読める」が プロの条件です。"],
+      ["命名 — 最も安い設計行為", "変数や関数の名前は、コードの意図を伝える最大の手段です。「data」「tmp」ではなく「unpaidInvoices（未払い請求書）」のように、中身と目的が分かる名前をつけます。良い名前を考える過程で設計の曖昧さに気づくことも多く、命名は単なる作法ではなく思考の道具です。"],
+      ["コメントの作法", "良いコメントは「なぜそうしたか」を書き、コードを読めば分かる「何をしているか」は書きません。「この値はAPI側の制限で3秒に設定」のような背景・制約こそコメントの出番です。最良のコードはコメントがなくても意図が伝わるコードですが、どうしても表現できない文脈をコメントが補います。"],
+      ["DRY原則 — 繰り返しを避ける", "Don't Repeat Yourself——同じ知識をコードの複数箇所に重複させない原則です。同じ処理のコピペが3箇所にあると、仕様変更時に1箇所直し忘れてバグになります。共通処理は関数にまとめるのが基本。ただし「偶然似ているだけ」のコードを無理に統合すると逆に複雑化するため、見極めも大切です。"],
+      ["関数分割と単一責任", "一つの関数には一つの仕事だけをさせる原則です。「データを取得して、検証して、保存して、メールも送る」関数は、4つの関数に分けます。小さな関数は理解しやすく、テストしやすく、再利用しやすい。クラスや モジュールにも同じ原則が適用され、これがSOLID原則の最初の「S」です。"],
+      ["リファクタリング", "外から見た動作を変えずに、内部の構造を改善する作業です。長すぎる関数の分割、不明瞭な名前の改善、重複の除去などを、テストで安全を確保しながら少しずつ進めます。コードは放っておくと劣化（技術的負債の蓄積）します。料理人が包丁を研ぐように、継続的なリファクタリングが健康を保ちます。"],
+      ["コードレビュー", "他人の目でコードを確認し合う文化です。バグの早期発見だけでなく、知識の共有、設計の議論、チームのコード品質の平準化に効きます。レビューする側は「人ではなくコードを批評する」、される側は「指摘は人格否定ではない」という心構えが健全な文化の土台です。AIによるレビュー支援も普及し始めています。"],
+      ["エラーハンドリング", "想定外の事態（ファイルがない、通信が切れた、入力が不正）にどう対処するかの設計です。try-catchなどで例外を捕捉し、復旧する・再試行する・分かりやすく報告するを使い分けます。エラーを握りつぶして無視するのは最悪手で、障害の原因調査を不可能にします。「正常系より異常系の設計が腕の見せ所」です。"],
+      ["設計原則とデザインパターン", "先人が蓄積した「良い設計の定石」です。変更に強い構造を導くSOLID原則、頻出する設計課題への定番解であるデザインパターン（Singleton、Observerなど）があります。暗記するものではなく、「この場面はあのパターンが効く」と必要時に引ける引き出しとして少しずつ増やしていくものです。"],
+      ["ドキュメントを書く", "READMEはプロジェクトの玄関です。何のためのソフトか、どう動かすか、どう貢献するかを書きます。設計の意思決定の記録（ADR）、APIの仕様書なども含め、ドキュメントは「未来の誰かへの手紙」です。コードが How を語り、ドキュメントが Why と What を語る——この分担が長寿命のプロジェクトを作ります。"]
+    ]
+  },
+  {
+    no: "第八章",
+    title: "コンピュータの仕組み",
+    en: "How Computers Work",
+    desc: "コードの足元で何が起きているか。土台を知ると、見える世界が変わります。",
+    topics: [
+      ["CPUとメモリ", "CPUは命令を実行する頭脳、メモリ（RAM）は作業中のデータを置く机です。プログラムは実行時にメモリへ読み込まれ、CPUが1秒間に数十億回の命令を処理します。机（メモリ）が狭いと作業が遅くなり、ストレージ（倉庫）への往復が増えます。プログラムの速さの議論は、結局この構図に帰着します。"],
+      ["2進数とビット", "コンピュータの中ではすべての情報が0と1（ビット）で表現されます。8ビットで1バイト、数値も文字も画像も音も、最終的にはビット列です。2進数を知ると「なぜ255が上限なのか」（8ビットの最大値）、「なぜ0.1+0.2が0.30000000000000004になるのか」（浮動小数点の宿命）といった不思議が解けます。"],
+      ["文字コード", "文字を数値に対応させる規則です。英数字だけのASCIIから始まり、世界中の文字を統一的に扱うUnicode（実装としてUTF-8）が現在の標準です。「文字化け」はこの対応規則の食い違いで起きます。日本語を扱う開発では特に、「文字列は必ずUTF-8で統一する」が鉄則中の鉄則です。"],
+      ["ファイルとファイルシステム", "ストレージ上のデータを「ファイル」と「フォルダ」の階層で管理する仕組みです。ファイルの実体はただのバイト列で、拡張子（.txt、.png）は中身の解釈方法のヒントにすぎません。パス（/Users/name/file.txt）、権限（読み・書き・実行）、シンボリックリンクなどの概念は、開発環境の問題解決で頻繁に登場します。"],
+      ["OS（オペレーティングシステム）の役割", "WindowsやmacOS、LinuxといったOSは、ハードウェアとアプリの間に立つ管理者です。メモリの割り当て、ファイルの管理、プロセスのスケジューリング、周辺機器の制御を一手に引き受けます。アプリはOSが提供する窓口（システムコール）を通じてハードウェアを利用します。サーバーの世界ではLinuxが圧倒的多数派です。"],
+      ["プロセスとスレッド、並行処理", "実行中のプログラムをプロセス、その中の実行の流れをスレッドと呼びます。複数の処理を同時に進める並行処理は性能の鍵ですが、同じデータを同時に触ると競合状態という厄介なバグを生みます。「重い処理を待つ間に別の仕事を進める」非同期処理（async/await）は、現代プログラミングの必修概念です。"],
+      ["ネットワークとTCP/IP", "コンピュータ同士の通信は、役割分担された層の積み重ねで実現されています。IPアドレスで相手を特定し（IP）、データを確実に届け（TCP）、その上でHTTPなどのアプリの会話が走ります。「パケットに分割されて運ばれ、組み立て直される」という基本イメージを持つと、通信エラーやレイテンシの議論が理解できるようになります。"],
+      ["DNSとドメイン", "人間が覚えやすい「example.com」をコンピュータ用のIPアドレスに変換する、インターネットの電話帳です。ブラウザにURLを打つと、まずDNSへの問い合わせが起き、得られたIPアドレスに接続します。Webサイトの公開、メール設定、障害調査（「DNSが浸透していない」問題）など、実務での登場頻度は高めです。"],
+      ["暗号化とHTTPS", "通信の盗み見や改ざんを防ぐ仕組みです。HTTPSは、公開鍵暗号で安全に鍵を交換し、共通鍵暗号で高速に通信を暗号化します。錠前マークは「通信経路が保護されている」証明であり、現在のWebでは必須です。パスワードのハッシュ化保存と合わせて、「生のままの秘密を持ち歩かない・保存しない」が暗号の基本思想です。"],
+      ["性能とボトルネック", "プログラムの遅さの原因は、たいてい一箇所（ボトルネック）に集中しています。CPU計算、メモリ不足、ディスクI/O、ネットワーク待ち、データベースの遅いクエリ——どれが原因かを計測で特定してから直すのが鉄則です。「推測するな、計測せよ」という格言の通り、勘での最適化はたいてい外れます。"]
+    ]
+  },
+  {
+    no: "第九章",
+    title: "現代の開発現場",
+    en: "Modern Development",
+    desc: "チームでソフトウェアを作るとはどういうことか。現場の動き方を知ります。",
+    topics: [
+      ["アジャイル開発", "最初に完璧な計画を立てて一気に作る（ウォーターフォール）のではなく、短いサイクルで「作って、見せて、直す」を繰り返す開発思想です。要件は変わるものという前提に立ち、動くソフトウェアを頻繁に届けながら方向修正します。現代のソフトウェア開発の大半は、この考え方をベースにしています。"],
+      ["スクラムとチーム運営", "アジャイルを実践する代表的な型です。1〜4週間の「スプリント」を単位に、計画→開発→振り返りを回します。毎日の短い同期（デイリースクラム）、優先順位つきのタスクリスト（バックログ）、改善の振り返り（レトロスペクティブ）が主要な道具です。型に従うことより「検査と適応」の精神が本質です。"],
+      ["要件定義と仕様", "「何を作るか」を決める工程で、ソフトウェア開発の失敗の最大要因はコードではなくここにあります。曖昧な要望を、画面・データ・処理の具体的な仕様に翻訳します。「ユーザーは何に困っていて、何ができれば解決か」から出発し、作らないものを決めることも同じくらい重要です。"],
+      ["マイクロサービスとモノリス", "システム全体を一つの大きなアプリとして作るのがモノリス、機能ごとに独立した小さなサービスへ分割し、API で連携させるのがマイクロサービスです。マイクロサービスはチームごとの独立開発と部分的なスケールを可能にしますが、運用の複雑さは増します。「まずモノリスで始め、必要になったら分割」が現実的な定石です。"],
+      ["サーバーレスとマネージドサービス", "サーバーの管理をクラウドに任せ、コードだけを書いて動かすスタイルです。関数単位で実行されるFaaS（AWS Lambdaなど）や、認証・DB・ホスティングがセットになったBaaS（Firebase、Supabaseなど）があります。インフラの運用負担が激減するため、小規模チームや個人開発の強力な選択肢です。"],
+      ["モバイルアプリ開発", "iOS（Swift）とAndroid（Kotlin）のネイティブ開発に加え、一つのコードで両方に対応するクロスプラットフォーム（Flutter、React Native）が広く使われています。アプリストアの審査、プッシュ通知、オフライン対応など、Webとは異なる作法があります。「Webとアプリのどちらで作るか」は企画段階の重要な分岐です。"],
+      ["オープンソースソフトウェア（OSS）", "ソースコードを公開し、誰でも利用・改変・再配布できるソフトウェアです。Linux、Python、Reactなど、現代の開発はOSSの巨大な生態系の上に成り立っています。ライセンス（MIT、GPLなど）ごとの利用条件の違いは実務で重要です。利用するだけでなく、バグ報告や修正で貢献する文化への参加は最良の学習機会でもあります。"],
+      ["セキュリティと脆弱性対応", "ソフトウェアの欠陥のうち、攻撃に悪用できるものを脆弱性と呼びます。発見された脆弱性はCVEという番号で公開され、依存ライブラリの脆弱性を自動検知するツール（Dependabotなど）も普及しています。「作って終わり」ではなく、依存の更新とパッチ適用を続けることが、運用するソフトウェアの義務です。"],
+      ["AIとともに書くコード", "GitHub CopilotやClaude Codeなどにより、AIがコードの補完・生成・レビュー・デバッグを支援する時代になりました。実装の高速化は劇的ですが、生成コードの正しさを判断する力——つまり本書で学ぶような基礎——の価値はむしろ上がっています。「AIに書かせて、人間が設計し検証する」が新しい標準形です。"],
+      ["技術選定の考え方", "言語やフレームワークの選択は、流行ではなく制約から考えます。チームの習熟度、採用市場、コミュニティの活発さ、10年後も保守されているか、撤退のしやすさ——。「枯れた技術」の安定と「新しい技術」の生産性のバランスを取る判断こそ、シニアエンジニアの仕事です。銀の弾丸（万能の解決策）は存在しません。"]
+    ]
+  },
+  {
+    no: "第十章",
+    title: "学び方とキャリア",
+    en: "Learning & Career",
+    desc: "プログラミングとの長い付き合い方。学び続けるための地図を描きます。",
+    topics: [
+      ["学習ロードマップ", "定番の道筋は、①1つの言語の基礎文法（変数〜関数）→②小さなプログラムを自力で書く→③Git・ターミナルなどの道具→④作りたい分野（Web、アプリ、データ）の専門技術→⑤チーム開発の作法、という階段です。焦って全部を同時にやらず、「今は何を学ぶ段階か」を意識すると迷子になりません。"],
+      ["手を動かして学ぶ", "プログラミングは自転車と同じで、見ているだけでは乗れるようになりません。教材のコードを書き写して動かす（写経）、少し改造する、エラーを直す——この繰り返しが体に文法を染み込ませます。「チュートリアルは完走できるのに自分では書けない」壁は誰もが通る道で、小さな自作で乗り越えるのが定石です。"],
+      ["エラーと向き合う力", "初心者と経験者の最大の差は、エラーに動じない心です。エラーメッセージを最後まで読む、どの行で何が起きたかを特定する、最小の再現コードに切り詰める、検索する——この手順を癖にします。エラーは失敗ではなく、コンピュータからの具体的なフィードバック。エラーを直した数だけ、確実に強くなります。"],
+      ["質問とAIの活用", "質問の質は学習速度を左右します。「動きません」ではなく「何をしたら、何が起き、何を試したか」を添えるのが良い質問の型です。AIに対しても同じで、文脈とコードとエラーを渡すほど的確な助けが返ります。AIで答えを得たら「なぜそれで直るのか」を一問だけ深掘りする習慣が、丸写しと理解の分かれ目です。"],
+      ["ポートフォリオを作る", "学習の成果は「動くもの」で示すのが最も雄弁です。自分の困りごとを解決する小さなツール、趣味のデータを使ったWebアプリなど、自分ごとの題材が長続きします。コードをGitHubで公開し、READMEに「何を、なぜ、どう作ったか」を書く——それ自体が実務スキルの証明になります。"],
+      ["資格と体系的学習", "日本では基本情報技術者試験・応用情報技術者試験が、コンピュータサイエンスの基礎を体系的に押さえる良い地図になります。資格自体より「学習の過程で知識の穴が埋まる」ことに価値があります。実務能力の証明はあくまで作ったものと経験ですが、土台の体系化として資格学習は有効な投資です。"],
+      ["エンジニアの職種", "Webフロントエンド、バックエンド、モバイル、インフラ・SRE、データエンジニア、機械学習エンジニア、QA、セキュリティ——専門分化が進んでいます。まずはWeb系の基礎（本書の第四〜六章）が多くの職種への共通の入口です。キャリアは一本道ではなく、隣接分野への越境がむしろ強みになります。"],
+      ["コミュニティと情報源", "公式ドキュメントが最も正確な一次情報です。加えて、技術ブログ（Zenn、Qiita）、カンファレンス、勉強会、OSSコミュニティが生きた知識の源になります。英語の情報圏に踏み出すと得られる情報量は一桁増えます。「人に説明する（記事を書く・登壇する）」ことは、最強のアウトプット学習でもあります。"],
+      ["継続のコツ", "プログラミング学習の最大の敵は挫折です。対策は、①完璧主義を捨てて動くものを優先する、②毎日15分でも触る習慣にする、③学んだことを記録して成長を可視化する、④仲間や発表の場を持つ、の4つ。「分からない状態に耐える力」も技術のうち。分からなさは無能の証ではなく、学習中の正常な状態です。"],
+      ["まとめ — 次の一歩へ", "ここまでで、プログラムの基本要素から、データ構造、言語、Web、データベース、開発の道具、コードの流儀、コンピュータの足元、現場の動き方までを一巡しました。おめでとうございます。次の一歩は、何かひとつ「自分のための小さなプログラム」を完成させること。書いた分だけ、世界の解像度は上がります。姉妹巻のAI編とあわせて、よい旅を。"]
+    ]
+  }
+];
+
+const content = document.getElementById("content");
+const toc = document.getElementById("toc");
+const STORAGE_KEY = "prog100-progress";
+let progress = {};
+try { progress = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch (e) { progress = {}; }
+
+let num = 0;
+CHAPTERS.forEach((ch, ci) => {
+  const start = num + 1;
+  const section = document.createElement("section");
+  section.className = "chapter";
+  section.id = "ch" + (ci + 1);
+
+  const head = document.createElement("div");
+  head.className = "chapter-head";
+  head.innerHTML = `
+    <div class="chapter-no">${ch.no}</div>
+    <h2>${ch.title}</h2>
+    <div class="chapter-en">${ch.en} ・ ${start} — ${start + ch.topics.length - 1}</div>`;
+  section.appendChild(head);
+
+  const desc = document.createElement("p");
+  desc.className = "chapter-desc";
+  desc.textContent = ch.desc;
+  section.appendChild(desc);
+
+  ch.topics.forEach(([title, body]) => {
+    num++;
+    const n = num;
+    const div = document.createElement("article");
+    div.className = "topic" + (progress[n] ? " done" : "");
+    div.innerHTML = `
+      <div class="topic-head">
+        <span class="topic-num">${String(n).padStart(3, "0")}</span>
+        <h3 class="topic-title">${title}</h3>
+        <button class="stamp" title="読んだら印を押す">${progress[n] ? "読了" : "未読"}</button>
+      </div>
+      <p class="topic-body">${body}</p>`;
+    const stamp = div.querySelector(".stamp");
+    stamp.addEventListener("click", () => {
+      const nowDone = !progress[n];
+      if (nowDone) progress[n] = true; else delete progress[n];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+      div.classList.toggle("done", nowDone);
+      stamp.textContent = nowDone ? "読了" : "未読";
+      updateProgress();
+      applyFilters();
+    });
+    section.appendChild(div);
+  });
+
+  content.appendChild(section);
+
+  const link = document.createElement("a");
+  link.href = "#ch" + (ci + 1);
+  link.innerHTML = `<span class="toc-no">${ch.no}</span><span>${ch.title}</span>`;
+  toc.appendChild(link);
+});
+
+function updateProgress() {
+  const done = Object.keys(progress).length;
+  document.getElementById("doneCount").textContent = done;
+  document.getElementById("meterFill").style.width = done + "%";
+  document.getElementById("congrats").classList.toggle("show", done === 100);
+  document.getElementById("cntUnread").textContent = 100 - done;
+  document.getElementById("cntRead").textContent = done;
+}
+updateProgress();
+
+let filterMode = "all";
+const searchBox = document.getElementById("searchBox");
+const emptyNote = document.getElementById("emptyNote");
+
+function applyFilters() {
+  const q = searchBox.value.trim().toLowerCase();
+  let visibleCount = 0;
+  document.querySelectorAll(".topic").forEach((t) => {
+    const matchQ = !q ||
+      t.querySelector(".topic-title").textContent.toLowerCase().includes(q) ||
+      t.querySelector(".topic-body").textContent.toLowerCase().includes(q);
+    const done = t.classList.contains("done");
+    const matchF = filterMode === "all" || (filterMode === "read" ? done : !done);
+    const show = matchQ && matchF;
+    t.style.display = show ? "" : "none";
+    if (show) visibleCount++;
+  });
+  document.querySelectorAll("section.chapter").forEach((s) => {
+    const visible = [...s.querySelectorAll(".topic")].some((t) => t.style.display !== "none");
+    s.style.display = visible ? "" : "none";
+  });
+  if (visibleCount === 0) {
+    emptyNote.textContent =
+      filterMode === "read" ? "読了の項目は、まだありません。" :
+      filterMode === "unread" ? "未読の項目はありません。全て読了です。" :
+      "該当する項目が見つかりませんでした。";
+    emptyNote.classList.add("show");
+  } else {
+    emptyNote.classList.remove("show");
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filterMode = btn.dataset.filter;
+    document.querySelectorAll(".filter-btn").forEach((b) => b.classList.toggle("active", b === btn));
+    applyFilters();
+  });
+});
+
+searchBox.addEventListener("input", applyFilters);
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (!confirm("読了の記録をすべて白紙に戻しますか？")) return;
+  progress = {};
+  localStorage.removeItem(STORAGE_KEY);
+  document.querySelectorAll(".topic").forEach((t) => {
+    t.classList.remove("done");
+    t.querySelector(".stamp").textContent = "未読";
+  });
+  updateProgress();
+  applyFilters();
+});
+</script>
+</body>
+</html>
