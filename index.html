@@ -173,10 +173,17 @@
     nav.toc { position: static; width: 100%; }
   }
 
-  /* 検索 */
-  .search-wrap { margin-bottom: 72px; }
+  /* 検索・絞り込み */
+  .search-wrap {
+    margin-bottom: 72px;
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
   .search-box {
-    width: 100%;
+    flex: 1;
+    min-width: 220px;
     padding: 10px 2px;
     border: none;
     border-bottom: 1px solid var(--ink);
@@ -188,6 +195,46 @@
   }
   .search-box::placeholder { color: #a39b89; }
   .search-box:focus { outline: none; border-bottom: 2px solid var(--vermilion); }
+
+  .filter-tabs { display: flex; align-items: baseline; }
+  .filter-btn {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-family: var(--serif);
+    font-size: 0.92rem;
+    letter-spacing: 0.18em;
+    color: #a39b89;
+    padding: 10px 4px 8px;
+    margin-left: 24px;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .filter-tabs .filter-btn:first-child { margin-left: 0; }
+  .filter-btn:hover { color: var(--vermilion); }
+  .filter-btn.active {
+    color: var(--ink);
+    border-bottom-color: var(--vermilion);
+    font-weight: 700;
+  }
+  .filter-btn .cnt {
+    font-size: 0.72rem;
+    color: #a39b89;
+    margin-left: 4px;
+    letter-spacing: 0.05em;
+    font-feature-settings: "tnum";
+  }
+  .empty-note {
+    display: none;
+    font-family: var(--serif);
+    color: var(--ink-soft);
+    letter-spacing: 0.15em;
+    padding: 48px 0;
+    text-align: center;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .empty-note.show { display: block; }
 
   /* 章 */
   section.chapter { margin-bottom: 96px; }
@@ -361,8 +408,14 @@
   <main>
     <div class="search-wrap">
       <input type="search" class="search-box" id="searchBox" placeholder="ことばで探す — Transformer、過学習、RAG …">
+      <div class="filter-tabs" role="tablist">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="unread">未読<span class="cnt" id="cntUnread"></span></button>
+        <button class="filter-btn" data-filter="read">読了<span class="cnt" id="cntRead"></span></button>
+      </div>
     </div>
     <div class="congrats" id="congrats">全百項、読了。お見事です。</div>
+    <p class="empty-note" id="emptyNote"></p>
     <div id="content"></div>
   </main>
 </div>
@@ -603,6 +656,7 @@ CHAPTERS.forEach((ch, ci) => {
       div.classList.toggle("done", nowDone);
       stamp.textContent = nowDone ? "読了" : "未読";
       updateProgress();
+      applyFilters();
     });
     section.appendChild(div);
   });
@@ -620,19 +674,52 @@ function updateProgress() {
   document.getElementById("doneCount").textContent = done;
   document.getElementById("meterFill").style.width = done + "%";
   document.getElementById("congrats").classList.toggle("show", done === 100);
+  document.getElementById("cntUnread").textContent = 100 - done;
+  document.getElementById("cntRead").textContent = done;
 }
 updateProgress();
 
-document.getElementById("searchBox").addEventListener("input", (e) => {
-  const q = e.target.value.trim().toLowerCase();
+let filterMode = "all";
+const searchBox = document.getElementById("searchBox");
+const emptyNote = document.getElementById("emptyNote");
+
+function applyFilters() {
+  const q = searchBox.value.trim().toLowerCase();
+  let visibleCount = 0;
   document.querySelectorAll(".topic").forEach((t) => {
-    t.style.display = !q || t.textContent.toLowerCase().includes(q) ? "" : "none";
+    const matchQ = !q ||
+      t.querySelector(".topic-title").textContent.toLowerCase().includes(q) ||
+      t.querySelector(".topic-body").textContent.toLowerCase().includes(q);
+    const done = t.classList.contains("done");
+    const matchF = filterMode === "all" || (filterMode === "read" ? done : !done);
+    const show = matchQ && matchF;
+    t.style.display = show ? "" : "none";
+    if (show) visibleCount++;
   });
   document.querySelectorAll("section.chapter").forEach((s) => {
     const visible = [...s.querySelectorAll(".topic")].some((t) => t.style.display !== "none");
     s.style.display = visible ? "" : "none";
   });
+  if (visibleCount === 0) {
+    emptyNote.textContent =
+      filterMode === "read" ? "読了の項目は、まだありません。" :
+      filterMode === "unread" ? "未読の項目はありません。全て読了です。" :
+      "該当する項目が見つかりませんでした。";
+    emptyNote.classList.add("show");
+  } else {
+    emptyNote.classList.remove("show");
+  }
+}
+
+document.querySelectorAll(".filter-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    filterMode = btn.dataset.filter;
+    document.querySelectorAll(".filter-btn").forEach((b) => b.classList.toggle("active", b === btn));
+    applyFilters();
+  });
 });
+
+searchBox.addEventListener("input", applyFilters);
 
 document.getElementById("resetBtn").addEventListener("click", () => {
   if (!confirm("読了の記録をすべて白紙に戻しますか？")) return;
@@ -643,6 +730,7 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     t.querySelector(".stamp").textContent = "未読";
   });
   updateProgress();
+  applyFilters();
 });
 </script>
 </body>
